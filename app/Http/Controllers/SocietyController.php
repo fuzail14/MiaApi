@@ -83,6 +83,7 @@ class SocietyController extends Controller
 
 
     }
+    
     public function viewallsocieties($userid)
 
     {
@@ -108,7 +109,8 @@ class SocietyController extends Controller
     }
 
 
-     public function     viewsociety($societyid)
+
+     public function viewsociety($societyid)
      {
         $society = Society:: where('id', $societyid)->get() ;
 

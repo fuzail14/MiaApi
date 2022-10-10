@@ -141,21 +141,12 @@ class GateKeeperController extends Controller
 
             'firstname' => 'required|string|max:191',
             'lastname' => 'required|string|max:191',
-
             'address' => 'required',
             'mobileno' => 'required',
             'gateno' => 'required',
-            
-
-
             'password' => 'required',
             'image' => 'required|image',
             "id" => 'required|exists:users,id',
-
-
-
-
-
         ]);
 
 
@@ -174,7 +165,7 @@ class GateKeeperController extends Controller
         $user->address = $request->address;
         $user->mobileno = $request->mobileno;
 
-        
+
         $user->password = $request->password;
 
         if ($request->hasFile('image')) {
@@ -201,11 +192,10 @@ class GateKeeperController extends Controller
 
         return response()->json([
             "success" => true,
-            
-            "data" => [$user,$gatekeeper],
-            
+
+            "data" => [$user, $gatekeeper],
+
             "message" => "Gate Keeper  Details Updated Successfully"
         ]);
-
     }
 }

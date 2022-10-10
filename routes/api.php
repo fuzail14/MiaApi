@@ -7,8 +7,7 @@ use App\Http\Controllers\SubAdminSocietyController;
 use App\Http\Controllers\SocietyController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\GateKeeperController;
-
-
+use App\Http\Controllers\NoticeBoardController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -18,6 +17,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::put('society/updatesociety', [SocietyController::class, 'updatesociety']);
   Route::get('society/viewallsocieties/{userid}', [SocietyController::class, 'viewallsocieties']);
   Route::get('society/deletesociety/{id}', [SocietyController::class, 'deletesociety']);
+
   Route::get('society/viewsociety/{societyid}', [SocietyController::class, 'viewsociety']);
   Route::get('society/searchsociety/{q?}', [SocietyController::class, 'searchsociety']);
 
@@ -41,7 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('viewresidents/{id}', [ResidentController::class, 'viewresidents']);
 
   Route::get('deleteresident/{id}', [ResidentController::class, 'deleteresident']);
-  
+
   Route::post('updateresident', [ResidentController::class, 'updateresident']);
 
 
@@ -52,11 +52,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('viewgatekeepers/{id}', [GateKeeperController::class, 'viewgatekeepers']);
   Route::get('deletegatekeeper/{id}', [GateKeeperController::class, 'deletegatekeeper']);
   Route::post('updategatekeeper', [GateKeeperController::class, 'updategatekeeper']);
-  
-  
-  
-  
-  
+
+
+  //Notice Board
+
+  Route::post('addnoticeboarddetail', [NoticeBoardController::class, 'addnoticeboarddetail']);
+  Route::get('viewallnotices/{id}', [NoticeBoardController::class, 'viewallnotices']);
+  Route::get('deletenotice/{id}', [NoticeBoardController::class, 'deletenotice']);
+  Route::post('updatenotice', [NoticeBoardController::class, 'updatenotice']);
+  Route::post('sendNotification', [NoticeBoardController::class, 'sendNotification']);
 });
 
 
