@@ -14,8 +14,12 @@ class Notice extends Model
 
         'noticetitle',
         'noticedetail',
-        'date',
-        //'time',
+        'startdate',
+        'enddate',
+        
+        'starttime',
+        'endtime',
+        
         'status',
         
         'subadminid',

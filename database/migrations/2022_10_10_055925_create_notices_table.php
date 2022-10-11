@@ -18,8 +18,13 @@ return new class extends Migration
             $table->string('noticetitle');
             $table->string('noticedetail');
 
-            $table->date('date');
-            //$table->time('time');
+            $table->date('startdate');
+            $table->date('enddate');
+ 
+
+            $table->time('starttime');
+            $table->time('endtime');
+            
             $table->integer('status');
 
 

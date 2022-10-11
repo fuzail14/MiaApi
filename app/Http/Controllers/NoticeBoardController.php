@@ -18,8 +18,14 @@ class NoticeBoardController extends Controller
         $isValidate = Validator::make($request->all(), [
             'noticetitle' => 'required|string',
             'noticedetail' => 'required|string',
-            'date' => 'required|date',
-            //'time' => 'required',
+            'startdate' => 'required|date',
+            'enddate' => 'required|date',
+
+            'starttime' => 'required|after:' . Carbon::now()->format('H:i:s'),
+            'endtime' => 'required|after:start_time',
+
+            
+            
 
             'status' => 'required',
 
@@ -45,8 +51,13 @@ class NoticeBoardController extends Controller
         $notice->noticetitle = $request->noticetitle;
         $notice->noticedetail = $request->noticedetail;
 
-        $notice->date =  Carbon::parse($request->date)->format('m-d-y');
-        //$notice->time = $request->time;
+        $notice->startdate =  Carbon::parse($request->startdate)->format('m-d-y');
+        $notice->enddate =  Carbon::parse($request->enddate)->format('m-d-y');
+        
+        $notice->starttime = $request->starttime;
+        $notice->endtime = $request->endtime;
+
+
         $notice->status = $request->status;
 
         $notice->subadminid = $request->subadminid;
@@ -70,7 +81,7 @@ class NoticeBoardController extends Controller
         $notice = Notice::where('subadminid', $subadminid)->get();
 
 
-        return response()->json(["data" => $notice]);
+        return response()->json(["NoticeList" => $notice]);
     }
 
 
@@ -95,8 +106,10 @@ class NoticeBoardController extends Controller
             ], 200);
         } else {
             return response()->json([
-                'message' => 'error',
-                "data" => false
+                
+                "data" => false,
+                
+                "message" => "Notice Not deleted"
             ]);
         }
     }
@@ -110,8 +123,12 @@ class NoticeBoardController extends Controller
         $isValidate = Validator::make($request->all(), [
             'noticetitle' => 'required|string',
             'noticedetail' => 'required|string',
-            'date' => 'required|date',
-            //'time' => 'required',
+            'startdate' => 'required|date',
+            'enddate' => 'required|date',
+
+            'starttime' => 'required|after:' . Carbon::now()->format('H:i:s'),
+            'endtime' => 'required|after:start_time',
+            
 
             'status' => 'required',
 
@@ -137,8 +154,13 @@ class NoticeBoardController extends Controller
         $notice->noticetitle = $request->noticetitle;
         $notice->noticedetail = $request->noticedetail;
 
-        $notice->date =  Carbon::parse($request->date)->format('m-d-y');
-        //$notice->time = $request->time;
+        
+        $notice->startdate =  Carbon::parse($request->startdate)->format('m-d-y');
+        $notice->enddate =  Carbon::parse($request->enddate)->format('m-d-y');
+        
+        $notice->starttime = $request->starttime;
+        $notice->endtime = $request->endtime;
+        
         $notice->status = $request->status;
 
 
