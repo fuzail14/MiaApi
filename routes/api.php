@@ -60,7 +60,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('viewallnotices/{id}', [NoticeBoardController::class, 'viewallnotices']);
   Route::get('deletenotice/{id}', [NoticeBoardController::class, 'deletenotice']);
   Route::post('updatenotice', [NoticeBoardController::class, 'updatenotice']);
-  Route::post('sendNotification', [NoticeBoardController::class, 'sendNotification']);
+  
 });
 
 

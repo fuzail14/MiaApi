@@ -24,8 +24,8 @@ class NoticeBoardController extends Controller
             'starttime' => 'required|after:' . Carbon::now()->format('H:i:s'),
             'endtime' => 'required|after:start_time',
 
-            
-            
+
+
 
             'status' => 'required',
 
@@ -51,9 +51,9 @@ class NoticeBoardController extends Controller
         $notice->noticetitle = $request->noticetitle;
         $notice->noticedetail = $request->noticedetail;
 
-        $notice->startdate =  Carbon::parse($request->startdate)->format('m-d-y');
-        $notice->enddate =  Carbon::parse($request->enddate)->format('m-d-y');
-        
+        $notice->startdate =  Carbon::parse($request->startdate);
+        $notice->enddate =  Carbon::parse($request->enddate);
+
         $notice->starttime = $request->starttime;
         $notice->endtime = $request->endtime;
 
@@ -63,6 +63,33 @@ class NoticeBoardController extends Controller
         $notice->subadminid = $request->subadminid;
 
         $notice->save();
+        $tk = 'ct99wz8wTeemXnjYoM0KCe:APA91bEj3t_hU0LKRPCS6lVsvMHJDj_Yg4ES_OneTJBJSgxNi10Wlxpff5ZSX9eVYgZzAyoYP6k6EkGJNI0t2LHJyf39eCGkFAhMiHhU3gSGsAPc75Yz7cpjZ6MnY_KT_V7a_DhlOmdb';
+        $tk1 = 'd_JmZJF6Qfqd4g9RdxUEqB:APA91bE3FO0n7xWo9E1S4cEH1jgq63aSPZdxSVd6EDruH96WdMR_lvfsRGmB8tja1KRloDyLiZMujlbtzxsuxsTFjrCu-6IUyf8hF7puN0pATH4mX7eVmGeUHJ54oKNg_CrN3N9n5g-w';
+        $serverkey = 'AAAAcuxXPmA:APA91bEz-6ptcGS8KzmgmSLjb-6K_bva-so3i6Eyji_ihfncqXttVXjdBQoU6V8sKilzLb9MvSHFId-KK7idDwbGo8aXHpa_zjGpZuDpM67ICKM7QMCGUO_JFULTuZ_ApIOxdF3TXeDR';
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $mydata = [
+            'registration_ids' => [$tk, $tk1],
+            "data" => $notice,
+            "notification" => [
+                'title' => $notice->noticetitle, 'body' => $notice->noticedetail,
+                'description' => "jani"
+            ]
+        ];
+        $finaldata = json_encode($mydata);
+        $headers = array(
+            'Authorization: key=' . $serverkey,
+            'Content-Type: application/json'
+        );
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $finaldata);
+        $result = curl_exec($ch);
+        // var_dump($result);
+        curl_close($ch);
 
 
         return response()->json([
@@ -81,7 +108,7 @@ class NoticeBoardController extends Controller
         $notice = Notice::where('subadminid', $subadminid)->get();
 
 
-        return response()->json(["NoticeList" => $notice]);
+        return response()->json(["data" => $notice]);
     }
 
 
@@ -106,9 +133,9 @@ class NoticeBoardController extends Controller
             ], 200);
         } else {
             return response()->json([
-                
+
                 "data" => false,
-                
+
                 "message" => "Notice Not deleted"
             ]);
         }
@@ -120,6 +147,8 @@ class NoticeBoardController extends Controller
 
 
     {
+
+
         $isValidate = Validator::make($request->all(), [
             'noticetitle' => 'required|string',
             'noticedetail' => 'required|string',
@@ -127,8 +156,8 @@ class NoticeBoardController extends Controller
             'enddate' => 'required|date',
 
             'starttime' => 'required|after:' . Carbon::now()->format('H:i:s'),
-            'endtime' => 'required|after:start_time',
-            
+            'endtime' => 'required',
+
 
             'status' => 'required',
 
@@ -154,13 +183,15 @@ class NoticeBoardController extends Controller
         $notice->noticetitle = $request->noticetitle;
         $notice->noticedetail = $request->noticedetail;
 
-        
-        $notice->startdate =  Carbon::parse($request->startdate)->format('m-d-y');
-        $notice->enddate =  Carbon::parse($request->enddate)->format('m-d-y');
-        
+
+
+
+        $notice->startdate =  Carbon::parse($request->startdate)->format('y-m-d');
+        $notice->enddate =  Carbon::parse($request->enddate)->format('y-m-d');
+
         $notice->starttime = $request->starttime;
         $notice->endtime = $request->endtime;
-        
+
         $notice->status = $request->status;
 
 
@@ -178,7 +209,4 @@ class NoticeBoardController extends Controller
             "message" => "notice update successfully"
         ]);
     }
-
-
-    
 }
