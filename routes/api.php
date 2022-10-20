@@ -8,6 +8,9 @@ use App\Http\Controllers\SocietyController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\GateKeeperController;
 use App\Http\Controllers\NoticeBoardController;
+use App\Http\Controllers\ReportController;
+
+
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -60,7 +63,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('viewallnotices/{id}', [NoticeBoardController::class, 'viewallnotices']);
   Route::get('deletenotice/{id}', [NoticeBoardController::class, 'deletenotice']);
   Route::post('updatenotice', [NoticeBoardController::class, 'updatenotice']);
-  
+
+
+  //Residents Reort To Admin
+  Route::post('reporttoadmin', [ReportController::class, 'reporttoadmin']);
+  Route::post('updatereportstatus', [ReportController::class, 'updatereportstatus']);
+  Route::get('deletereport/{id}', [ReportController::class, 'deletereport']);
+  Route::get('reportedresidents', [ReportController::class, 'reportedresidents']);
 });
 
 

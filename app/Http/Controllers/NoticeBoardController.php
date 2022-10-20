@@ -21,8 +21,8 @@ class NoticeBoardController extends Controller
             'startdate' => 'required|date',
             'enddate' => 'required|date',
 
-            'starttime' => 'required|after:' . Carbon::now()->format('H:i:s'),
-            'endtime' => 'required|after:start_time',
+            'starttime' => 'required:' . Carbon::now(),
+            'endtime' => 'required|after:starttime',
 
 
 

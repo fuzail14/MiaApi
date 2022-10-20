@@ -7,16 +7,20 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\File;
 class RoleController extends Controller
 {
 public function  allusers(){
 
-$user= User::all();
+// $user= User::all();
 
 
-return response()->json(["data"=>$user]  );
+// return response()->json(["data"=>$user]  );
+dd(file(public_path('/storage/1665565347.jpg')));
 
+return response()->
+file(
+    public_path('/storage/1665565347.jpg')
+);
 
 }
 
@@ -30,11 +34,11 @@ return response()->json(["data"=>$user]  );
             'lastname' => 'required|string|max:191',
             'cnic' => 'required|unique:users|max:191',
             'address' => 'required',
-            'mobileno' => 'required|unique:users|max:191',
+            'mobileno' => 'required',
             'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
-            'image' => 'required|image|max:2048',
+            'image' => 'required|image',
         ]);
 
 
@@ -55,11 +59,9 @@ return response()->json(["data"=>$user]  );
 
         $image = $request->file('image');
         $imageName= time().".".$image->extension();
-        $image->move(public_path('images'), $imageName);
-
-
-
+        $image->move(public_path('/storage/'), $imageName);
         $user = new User;
+
 
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -108,6 +110,31 @@ return response()->json(["data"=>$user]  );
 
             $user = Auth:: user();
 
+
+            // dd($user->roleid);
+            if($user->roleid==3)
+            {
+
+             $users = User::where('cnic', $user->cnic)
+            ->join('residents', 'residents.residentid', '=' , 'users.id')->first();
+
+            $tk =   $request->user()->createToken('token')->plainTextToken;
+
+
+            return response()->json([
+                "success" => true,
+                "data" => $users,
+                "Bearer" => $tk
+
+
+            ]);}
+
+           else if($user->roleid==4)
+            {
+
+            $user = User::where('cnic', $user->cnic)
+            ->join('gatekeepers', 'gatekeepers.gatekeeperid', '=' , 'users.id')->first();
+
             $tk =   $request->user()->createToken('token')->plainTextToken;
 
 
@@ -117,8 +144,45 @@ return response()->json(["data"=>$user]  );
                 "Bearer" => $tk
 
 
-            ]);
-        } else if (!Auth::attempt(['cnic' => $request->cnic, 'password' => $request->password])) {
+            ]);}
+
+
+            else if($user->roleid==2)
+            {
+
+            $user = User::where('cnic', $user->cnic)
+            ->join('subadminsocieties', 'subadminsocieties.subadminid', '=' , 'users.id')->first();
+
+            $tk =   $request->user()->createToken('token')->plainTextToken;
+
+
+            return response()->json([
+                "success" => true,
+                "data" => $user,
+                "Bearer" => $tk
+
+
+            ]);}
+
+            else
+            {
+
+                $tk =   $request->user()->createToken('token')->plainTextToken;
+
+
+                return response()->json([
+                    "success" => true,
+                    "data" => $user,
+                    "Bearer" => $tk
+
+
+                ]);
+            }
+
+
+
+        }
+        else if (!Auth::attempt(['cnic' => $request->cnic, 'password' => $request->password])) {
 
             return response()->json([
                 "success" => false,

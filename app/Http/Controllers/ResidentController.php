@@ -6,24 +6,57 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Resident;
 use App\Models\Owner;
-
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Auth;
 class ResidentController extends Controller
 {
+
+
+
+public function searchresident ($subadminid,$q)
+{
+
+    // ->join('users', 'users.id', '=', 'residents.residentid')
+    // ->join('owners', 'owners.residentid', "=", 'residents.residentid');
+
+    $data = User::join(
+        'residents', 'users.id',
+         '=', 'residents.residentid')
+      ->Where('residents.subadminid',$subadminid)
+     ->Where('users.firstname','LIKE','%'.$q.'%')
+     ->orWhere('users.lastname','LIKE','%'.$q.'%')
+     ->orWhere('users.mobileno','LIKE','%'.$q.'%')
+     ->orWhere('users.cnic','LIKE','%'.$q.'%')
+     ->orWhere('users.address','LIKE','%'.$q.'%')
+     ->orWhere('residents.vechileno','LIKE','%'.$q.'%')->get();
+
+
+return response()->json(
+    [
+        "success" => true,
+        "residentslist" => $data
+    ]
+);
+
+
+
+
+}
+
     public function registerresident(Request $request)
 
 
     {
+
         $isValidate = Validator::make($request->all(), [
             'firstname' => 'required|string|max:191',
             'lastname' => 'required|string|max:191',
             'cnic' => 'required|unique:users|max:191',
             'address' => 'required',
             'mobileno' => 'required',
-            'roleid' => 'required', 
+            'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
             'image' => 'required|image',
@@ -57,6 +90,7 @@ class ResidentController extends Controller
         $user->roleid = $request->roleid;
         $user->rolename = $request->rolename;
         $user->password = Hash::make($request->password);
+
         $image = $request->file('image');
         $imageName = time() . "." . $image->extension();
         $image->move(public_path('/storage/'), $imageName);
@@ -91,18 +125,22 @@ class ResidentController extends Controller
 
             ]
         );
-        
     }
 
     public function viewresidents($id)
 
 
     {
+        // $data = Resident::where('subadminid', $id)
+        //     ->join('users', 'users.id', '=', 'residents.residentid')
+
+        //     ->join('owners', 'owners.residentid', "=", 'residents.residentid')->paginate(5);
+
+
         $data = Resident::where('subadminid', $id)
             ->join('users', 'users.id', '=', 'residents.residentid')
 
-            ->join('owners', 'owners.residentid', "=", 'residents.residentid')->paginate(5);
-
+            ->join('owners', 'owners.residentid', "=", 'residents.residentid')->get();
 
 
 
@@ -119,7 +157,7 @@ class ResidentController extends Controller
 
     {
 
-        $resident = User::where('id', $id)->delete();
+        $resident = Resident::where('residentid', $id)->delete();
 
         return response()->json([
 
@@ -137,7 +175,7 @@ class ResidentController extends Controller
         $isValidate = Validator::make($request->all(), [
             'firstname' => 'required|string|max:191',
             'lastname' => 'required|string|max:191',
-            'cnic' => 'required|unique:users|max:191',
+            // 'cnic' => 'required|unique:users|max:191',
             'address' => 'required',
             'mobileno' => 'required',
             // 'roleid' => 'required',
@@ -166,7 +204,7 @@ class ResidentController extends Controller
         $user->lastname = $request->lastname;
         $user->address = $request->address;
         $user->mobileno = $request->mobileno;
-        $user->cnic = $request->cnic;
+        // $user->cnic = $request->cnic;
         if ($request->hasFile('image')) {
             $destination = public_path('storage\\') . $user->image;
 
@@ -182,7 +220,6 @@ class ResidentController extends Controller
         }
         $user->update();
 
-
         $resident = Resident::where('residentid', $request->id)->first();
 
         $resident->update([
@@ -191,7 +228,6 @@ class ResidentController extends Controller
             'propertytype' => $request->propertytype,
             'committeemember' => $request->committeemember,
         ]);
-        
 
 
         if ($request->residenttype == "Rental") {
@@ -210,5 +246,61 @@ class ResidentController extends Controller
             "message" => "Resident  Details Updated Successfully"
         ]);
     }
+
+    public function residentlogin(Request $request)
+    {
+
+        $isValidate = Validator::make($request->all(), [
+
+            'cnic' => 'required',
+            'password' => 'required',
+        ]);
+
+
+
+        if ($isValidate->fails()) {
+            return response()->json([
+                "errors" => $isValidate->errors()->all(),
+                "success" => false
+
+            ], 403);
+
+        }
+            // $user = Auth:: user();
+
+            $user = User::where('cnic', $request->cnic)
+            ->join('residents', 'residents.residentid', '=' , 'users.id')->first();
+
+            // dd($user);
+            // if(Hash::check($request->password, $user->password)) {
+
+
+            //     return response()->json(['status'=>'true','message'=>'Email is correct']);
+            // } else {
+            //     return response()->json(['status'=>'false', 'message'=>'password is wrong']);
+            // }
+
+
+
+            $tk =   $request->user()->createToken('token')->plainTextToken;
+
+
+            return response()->json([
+                "success" => true,
+                "data" => $user,
+                "Bearer" => $tk
+
+
+            ]);
+
+
+            // return response()->json([
+            //     "success" => false,
+            //     "data" => "Unauthorized"
+
+            // ], 401);
+
+    }
+
 
 }
