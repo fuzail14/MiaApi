@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('residentid');
-            $table->foreign('residentid')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('userid');
+            $table->foreign('userid')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('subadminid');
             $table->foreign('subadminid')->references('id')->on('users')->onDelete('cascade');
             $table->string('title');

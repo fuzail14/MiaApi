@@ -13,8 +13,8 @@ class ReportController extends Controller
     public function reporttoadmin(Request $request)
     {
         $isValidate = Validator::make($request->all(), [
+            'userid' => 'required|exists:users,id',
             'subadminid' => 'required|exists:users,id',
-            'residentid' => 'required|exists:users,id',
             'title' => 'required|string',
             'description' => 'required|string',
             'date' => 'required|date',
@@ -28,7 +28,7 @@ class ReportController extends Controller
             ], 403);
         }
         $report = new Report();
-        $report->residentid = $request->residentid;
+        $report->userid = $request->userid;
         $report->subadminid = $request->subadminid;
         $report->title = $request->title;
         $report->description = $request->description;
@@ -85,6 +85,14 @@ class ReportController extends Controller
             ], 403);
         }
     }
+    public function adminreports($residentid)
+    {
+        $report = Report::where('userid', $residentid)->get();
+        return response()->json([
+            "success" => true,
+            "data" => $report,
+        ]);
+    }
     public function updatereportstatus(Request $request)
     {
         $isValidate = Validator::make($request->all(), [
@@ -112,20 +120,32 @@ class ReportController extends Controller
             "message" => "Status Updated Successfully"
         ]);
     }
-    public function reportedresidents()
+    public function reportedresidents($subadminid)
     {
-        
-         $report =  Report::where('residentid', 5)->where('subadminid', 4)->join('users', 'users.id', '=', 'reports.residentid')->distinct()->get();
-       
-        //$report =  Report::where('residentid', 'users.id')->join( 'users', 'users.id', '=', 'reports.residentid')->distinct()->get();
-        
-       
-        
+        $report =  User::where('subadminid', $subadminid)->join('reports', 'reports.userid', '=', 'users.id')->distinct()->get();
+        $res = $report->unique('userid');
         //  $data = subadminsociety::where('societyid', $id)->join('users', 'users.id', '=', 'subadminsocieties.subadminid')->get();
-       
         return response()->json([
             "success" => true,
-            "data" => $report,
+            "data" => $res->values()->all(),
+        ]);
+    }
+    public function reports($subadminid, $userid)
+    {
+        $reports =  Report::where('subadminid', $subadminid)->where('userid', $userid)->GET();
+        return response()->json([
+            "success" => true,
+            "data" => $reports
+        ]);
+    }
+
+
+    public function pendingreports ($subadminid)
+    {
+         $reports =  Report::where('subadminid',$subadminid)->join('users', 'reports.userid', '=', 'users.id')->GET();
+      return response()->json([
+            "success" => true,
+            "data" => $reports
         ]);
     }
 }

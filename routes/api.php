@@ -9,6 +9,8 @@ use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\GateKeeperController;
 use App\Http\Controllers\NoticeBoardController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\EventController;
+
 
 
 
@@ -70,6 +72,24 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::post('updatereportstatus', [ReportController::class, 'updatereportstatus']);
   Route::get('deletereport/{id}', [ReportController::class, 'deletereport']);
   Route::get('reportedresidents', [ReportController::class, 'reportedresidents']);
+
+
+  //Events
+  Route::post('event/addevent',[EventController::class,'addevent']);
+  Route::post('event/addeventimages',[EventController::class,'addeventimages']);
+  Route::post('event/updateevent',[EventController::class,'updateevent']);
+  Route::get('event/events/{userid}',[EventController::class,'events']);
+  Route::get('event/deleteevent/{id}',[EventController::class,'deleteevent']);
+
+
+  // Reports
+Route::post('reporttoadmin', [ReportController::class, 'reporttoadmin']);
+Route::get('adminreports/{residentid}', [ReportController::class, 'adminreports']);
+Route::post('updatereportstatus', [ReportController::class, 'updatereportstatus']);
+Route::get('deletereport/{id}', [ReportController::class, 'deletereport']);
+Route::get('reportedresidents/{subadminid}', [ReportController::class, 'reportedresidents']);
+Route::get('reports/{subadminid}/{userid}', [ReportController::class, 'reports']);
+Route::get('pendingreports/{subadminid}', [ReportController::class, 'pendingreports']);
 });
 
 

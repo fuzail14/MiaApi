@@ -14,7 +14,7 @@ class Society extends Model
 
         'societyname',
         'societyaddress',
-        'userid'
+        'superadminid'
 
 
     ];
@@ -25,3 +25,5 @@ class Society extends Model
 
 
 }
+
+

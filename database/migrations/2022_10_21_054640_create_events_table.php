@@ -13,29 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notices', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('noticetitle');
-            $table->string('noticedetail');
-
+            $table->unsignedBigInteger('userid');
+            $table->foreign('userid')->references('id')->on('users')->onDelete('cascade');
+            $table->string('title');
+            $table->string('description');
             $table->date('startdate');
             $table->date('enddate');
- 
-
-            $table->time('starttime');
-            $table->time('endtime');
-            
-            $table->integer('status');
-
-
-
-            $table->unsignedBigInteger('subadminid');
-            $table->foreign('subadminid')->references('id')->on('users')->onDelete('cascade');
-
+            $table->integer('active');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -43,9 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notices');
+        Schema::dropIfExists('events');
     }
 };
-
-
-
