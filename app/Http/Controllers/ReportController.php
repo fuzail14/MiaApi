@@ -87,7 +87,7 @@ class ReportController extends Controller
     }
     public function adminreports($residentid)
     {
-        $report = Report::where('userid', $residentid)->get();
+        $report = Report::where('userid', $residentid)->where('status','!=',3)->where('status' ,'!=' , 4)->get();
         return response()->json([
             "success" => true,
             "data" => $report,
@@ -98,7 +98,7 @@ class ReportController extends Controller
         $isValidate = Validator::make($request->all(), [
             'id' => 'required|exists:reports,id',
             'userid' => 'required|exists:users,id',
-            'date' => 'required|date',
+            //'date' => 'required|date',
             'status' => 'required',
             'statusdescription' => 'required',
         ]);
@@ -109,7 +109,7 @@ class ReportController extends Controller
             ], 403);
         }
         $report = Report::Find($request->id);
-        $report->date = Carbon::parse($request->date)->format('y-m-d');
+        //$report->date = Carbon::parse($request->date)->format('y-m-d');
         $report->status = $request->status;
         $report->updated_at = Carbon::now()->addHour(5)->toDateTimeString();
         $report->statusdescription = $request->statusdescription;
@@ -132,7 +132,7 @@ class ReportController extends Controller
     }
     public function reports($subadminid, $userid)
     {
-        $reports =  Report::where('subadminid', $subadminid)->where('userid', $userid)->GET();
+        $reports =  Report::where('subadminid', $subadminid)->where('userid', $userid)->where('status',2)->GET();
         return response()->json([
             "success" => true,
             "data" => $reports
@@ -140,10 +140,32 @@ class ReportController extends Controller
     }
 
 
-    public function pendingreports ($subadminid)
+    public function pendingreports($subadminid)
     {
-         $reports =  Report::where('subadminid',$subadminid)->join('users', 'reports.userid', '=', 'users.id')->GET();
-      return response()->json([
+        $reports =  Report::where('subadminid', $subadminid)->where('status',0)
+            ->join('users', 'reports.userid', '=', 'users.id')->select(
+                'reports.id',
+
+                "users.firstname",
+                "users.lastname",
+                "users.cnic",
+                "users.address",
+                "users.mobileno",
+                "users.roleid",
+                "users.rolename",
+                "users.image",
+                "reports.userid",
+                "reports.subadminid",
+                "reports.title",
+                "reports.description",
+                "reports.date",
+                "reports.status",
+                "reports.statusdescription",
+                 "reports.created_at",
+                 "reports.updated_at",
+
+            )->GET();
+        return response()->json([
             "success" => true,
             "data" => $reports
         ]);
