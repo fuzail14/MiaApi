@@ -88,8 +88,16 @@ Route::get('adminreports/{residentid}', [ReportController::class, 'adminreports'
 Route::post('updatereportstatus', [ReportController::class, 'updatereportstatus']);
 Route::get('deletereport/{id}', [ReportController::class, 'deletereport']);
 Route::get('reportedresidents/{subadminid}', [ReportController::class, 'reportedresidents']);
+
 Route::get('reports/{subadminid}/{userid}', [ReportController::class, 'reports']);
+
 Route::get('pendingreports/{subadminid}', [ReportController::class, 'pendingreports']);
+Route::get('historyreportedresidents/{subadminid}', [ReportController::class, 'historyreportedresidents']);
+Route::get('historyreports/{subadminid}/{userid}', [ReportController::class, 'historyreports']);
+
+
+
+
 });
 
 
