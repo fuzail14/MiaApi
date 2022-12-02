@@ -10,6 +10,9 @@ use App\Http\Controllers\GateKeeperController;
 use App\Http\Controllers\NoticeBoardController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PreApproveEntryController;
+
+
 
 
 
@@ -75,25 +78,41 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
   //Events
-  Route::post('event/addevent',[EventController::class,'addevent']);
-  Route::post('event/addeventimages',[EventController::class,'addeventimages']);
-  Route::post('event/updateevent',[EventController::class,'updateevent']);
-  Route::get('event/events/{userid}',[EventController::class,'events']);
-  Route::get('event/deleteevent/{id}',[EventController::class,'deleteevent']);
+  Route::post('event/addevent', [EventController::class, 'addevent']);
+  Route::post('event/addeventimages', [EventController::class, 'addeventimages']);
+  Route::post('event/updateevent', [EventController::class, 'updateevent']);
+  Route::get('event/events/{userid}', [EventController::class, 'events']);
+  Route::get('event/deleteevent/{id}', [EventController::class, 'deleteevent']);
 
 
   // Reports
-Route::post('reporttoadmin', [ReportController::class, 'reporttoadmin']);
-Route::get('adminreports/{residentid}', [ReportController::class, 'adminreports']);
-Route::post('updatereportstatus', [ReportController::class, 'updatereportstatus']);
-Route::get('deletereport/{id}', [ReportController::class, 'deletereport']);
-Route::get('reportedresidents/{subadminid}', [ReportController::class, 'reportedresidents']);
+  Route::post('reporttoadmin', [ReportController::class, 'reporttoadmin']);
+  Route::get('adminreports/{residentid}', [ReportController::class, 'adminreports']);
+  Route::post('updatereportstatus', [ReportController::class, 'updatereportstatus']);
+  Route::get('deletereport/{id}', [ReportController::class, 'deletereport']);
+  Route::get('reportedresidents/{subadminid}', [ReportController::class, 'reportedresidents']);
 
-Route::get('reports/{subadminid}/{userid}', [ReportController::class, 'reports']);
+  Route::get('reports/{subadminid}/{userid}', [ReportController::class, 'reports']);
 
-Route::get('pendingreports/{subadminid}', [ReportController::class, 'pendingreports']);
-Route::get('historyreportedresidents/{subadminid}', [ReportController::class, 'historyreportedresidents']);
-Route::get('historyreports/{subadminid}/{userid}', [ReportController::class, 'historyreports']);
+  Route::get('pendingreports/{subadminid}', [ReportController::class, 'pendingreports']);
+  Route::get('historyreportedresidents/{subadminid}', [ReportController::class, 'historyreportedresidents']);
+  Route::get('historyreports/{subadminid}/{userid}', [ReportController::class, 'historyreports']);
+
+
+  // Preapproveentry
+Route::get('getgatekeepers/{subadminid}', [PreApproveEntryController::class, 'getgatekeepers']);
+Route::get('getvisitorstypes', [PreApproveEntryController::class, 'getvisitorstypes']);
+Route::post('addvisitorstypes', [PreApproveEntryController::class, 'addvisitorstypes']);
+Route::post('addpreapproventry', [PreApproveEntryController::class, 'addpreapproventry']);
+Route::post('updatepreapproveentrystatus', [PreApproveEntryController::class, 'updatepreapproveentrystatus']);
+Route::get('viewpreapproveentryreports/{userid}', [PreApproveEntryController::class, 'viewpreapproveentryreports']);
+Route::get('preapproveentryresidents/{userid}', [PreApproveEntryController::class, 'preapproveentryresidents']);
+Route::get('preapproventrynotifications/{userid}', [PreApproveEntryController::class, 'preapproventrynotifications']);
+Route::get('preapproveentries/{userid}', [PreApproveEntryController::class, 'preapproveentries']);
+
+
+
+
 
 
 

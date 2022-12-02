@@ -17,7 +17,7 @@ class SocietyController extends Controller
             'societyname' => 'required',
             'societyaddress' => 'required',
             'superadminid' => 'required|exists:users,id',
-
+ 
 
         ]);
 

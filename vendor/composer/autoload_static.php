@@ -329,8 +329,8 @@ class ComposerStaticInitb7fd95329f772e3fb0fac6e225a0f186
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -497,6 +497,12 @@ class ComposerStaticInitb7fd95329f772e3fb0fac6e225a0f186
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\EventController' => __DIR__ . '/../..' . '/app/Http/Controllers/EventController.php',
+        'App\\Http\\Controllers\\GateKeeperController' => __DIR__ . '/../..' . '/app/Http/Controllers/GateKeeperController.php',
+        'App\\Http\\Controllers\\NoticeBoardController' => __DIR__ . '/../..' . '/app/Http/Controllers/NoticeBoardController.php',
+        'App\\Http\\Controllers\\PreApproveEntryController' => __DIR__ . '/../..' . '/app/Http/Controllers/PreApproveEntryController.php',
+        'App\\Http\\Controllers\\ReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReportController.php',
+        'App\\Http\\Controllers\\ResidentController' => __DIR__ . '/../..' . '/app/Http/Controllers/ResidentController.php',
         'App\\Http\\Controllers\\RoleController' => __DIR__ . '/../..' . '/app/Http/Controllers/RoleController.php',
         'App\\Http\\Controllers\\SocietyController' => __DIR__ . '/../..' . '/app/Http/Controllers/SocietyController.php',
         'App\\Http\\Controllers\\SubAdminSocietyController' => __DIR__ . '/../..' . '/app/Http/Controllers/SubAdminSocietyController.php',
@@ -510,6 +516,13 @@ class ComposerStaticInitb7fd95329f772e3fb0fac6e225a0f186
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Models\\Event' => __DIR__ . '/../..' . '/app/Models/Event.php',
+        'App\\Models\\Gatekeeper' => __DIR__ . '/../..' . '/app/Models/Gatekeeper.php',
+        'App\\Models\\Notice' => __DIR__ . '/../..' . '/app/Models/Notice.php',
+        'App\\Models\\Owner' => __DIR__ . '/../..' . '/app/Models/Owner.php',
+        'App\\Models\\Preapproveentry' => __DIR__ . '/../..' . '/app/Models/Preapproveentry.php',
+        'App\\Models\\Report' => __DIR__ . '/../..' . '/app/Models/Report.php',
+        'App\\Models\\Resident' => __DIR__ . '/../..' . '/app/Models/Resident.php',
         'App\\Models\\Society' => __DIR__ . '/../..' . '/app/Models/Society.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\subadminsociety' => __DIR__ . '/../..' . '/app/Models/subadminsociety.php',
