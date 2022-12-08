@@ -11,6 +11,7 @@ use App\Http\Controllers\NoticeBoardController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PreApproveEntryController;
+use App\Http\Controllers\BuildingController;
 
 
 
@@ -28,6 +29,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
   Route::get('society/viewsociety/{societyid}', [SocietyController::class, 'viewsociety']);
   Route::get('society/searchsociety/{q?}', [SocietyController::class, 'searchsociety']);
+  Route::get('society/filtersocietybuilding/{id}/{q?}', [SocietyController::class, 'filtersocietybuilding']);
+
 
 
   //User
@@ -100,23 +103,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
   // Preapproveentry
-Route::get('getgatekeepers/{subadminid}', [PreApproveEntryController::class, 'getgatekeepers']);
-Route::get('getvisitorstypes', [PreApproveEntryController::class, 'getvisitorstypes']);
-Route::post('addvisitorstypes', [PreApproveEntryController::class, 'addvisitorstypes']);
-Route::post('addpreapproventry', [PreApproveEntryController::class, 'addpreapproventry']);
-Route::post('updatepreapproveentrystatus', [PreApproveEntryController::class, 'updatepreapproveentrystatus']);
-Route::get('viewpreapproveentryreports/{userid}', [PreApproveEntryController::class, 'viewpreapproveentryreports']);
-Route::get('preapproveentryresidents/{userid}', [PreApproveEntryController::class, 'preapproveentryresidents']);
-Route::get('preapproventrynotifications/{userid}', [PreApproveEntryController::class, 'preapproventrynotifications']);
-Route::get('preapproveentries/{userid}', [PreApproveEntryController::class, 'preapproveentries']);
-
-
-
-
-
-
-
-
+  Route::get('getgatekeepers/{subadminid}', [PreApproveEntryController::class, 'getgatekeepers']);
+  Route::get('getvisitorstypes', [PreApproveEntryController::class, 'getvisitorstypes']);
+  Route::post('addvisitorstypes', [PreApproveEntryController::class, 'addvisitorstypes']);
+  Route::post('addpreapproventry', [PreApproveEntryController::class, 'addpreapproventry']);
+  Route::post('updatepreapproveentrystatus', [PreApproveEntryController::class, 'updatepreapproveentrystatus']);
+  Route::get('viewpreapproveentryreports/{userid}', [PreApproveEntryController::class, 'viewpreapproveentryreports']);
+  Route::get('preapproveentryresidents/{userid}', [PreApproveEntryController::class, 'preapproveentryresidents']);
+  Route::get('preapproventrynotifications/{userid}', [PreApproveEntryController::class, 'preapproventrynotifications']);
+  Route::get('preapproveentries/{userid}', [PreApproveEntryController::class, 'preapproveentries']);
 });
 
 

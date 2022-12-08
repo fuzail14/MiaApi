@@ -496,6 +496,7 @@ class ComposerStaticInitb7fd95329f772e3fb0fac6e225a0f186
     public static $classMap = array (
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Http\\Controllers\\BuildingController' => __DIR__ . '/../..' . '/app/Http/Controllers/BuildingController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\EventController' => __DIR__ . '/../..' . '/app/Http/Controllers/EventController.php',
         'App\\Http\\Controllers\\GateKeeperController' => __DIR__ . '/../..' . '/app/Http/Controllers/GateKeeperController.php',
@@ -516,6 +517,7 @@ class ComposerStaticInitb7fd95329f772e3fb0fac6e225a0f186
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Models\\Building' => __DIR__ . '/../..' . '/app/Models/Building.php',
         'App\\Models\\Event' => __DIR__ . '/../..' . '/app/Models/Event.php',
         'App\\Models\\Gatekeeper' => __DIR__ . '/../..' . '/app/Models/Gatekeeper.php',
         'App\\Models\\Notice' => __DIR__ . '/../..' . '/app/Models/Notice.php',

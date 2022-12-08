@@ -15,15 +15,28 @@ return new class extends Migration
     {
         Schema::create('societies', function (Blueprint $table) {
             $table->id();
-            $table->string('societyname');
-            $table->string('societyaddress');
+            $table->string('country');
+            
+            $table->string('state');
+
+            
+            $table->string('city');
+            $table->string('type');
+            
+
+            
+            $table->string('name');
+
+            $table->string('address');
             $table->unsignedBigInteger('superadminid');
             $table->foreign('superadminid')->references('id')->on('users')->onDelete('cascade');
             // $table->unsignedBigInteger('roleid');
             // $table->foreign('roleid')->references('roleid')->on('users');
             $table->timestamps();
+
             
         });
+
     }
 
     /**
