@@ -7,22 +7,22 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+
 class RoleController extends Controller
 {
-public function  allusers(){
+    public function  allusers()
+    {
 
-// $user= User::all();
+        // $user= User::all();
 
 
-// return response()->json(["data"=>$user]  );
-dd(file(public_path('/storage/1665565347.jpg')));
+        // return response()->json(["data"=>$user]  );
+        dd(file(public_path('/storage/1665565347.jpg')));
 
-return response()->
-file(
-    public_path('/storage/1665565347.jpg')
-);
-
-}
+        return response()->file(
+                public_path('/storage/1665565347.jpg')
+            );
+    }
 
 
 
@@ -50,15 +50,15 @@ file(
             ], 403);
         }
 
-    //     $image = $request->image;
-    //       //  base64 encoded
-    //     $image = str_replace('data:image/png;base64,', '', $image);
-    //     $image = str_replace(' ', '+', $image);
-    //     $imageName = time().'.'.'png';
-    //    File::put(public_path('images'). '/' . $imageName, base64_decode($image));
+        //     $image = $request->image;
+        //       //  base64 encoded
+        //     $image = str_replace('data:image/png;base64,', '', $image);
+        //     $image = str_replace(' ', '+', $image);
+        //     $imageName = time().'.'.'png';
+        //    File::put(public_path('images'). '/' . $imageName, base64_decode($image));
 
         $image = $request->file('image');
-        $imageName= time().".".$image->extension();
+        $imageName = time() . "." . $image->extension();
         $image->move(public_path('/storage/'), $imageName);
         $user = new User;
 
@@ -66,11 +66,11 @@ file(
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->cnic = $request->cnic;
-        $user->address= $request->address;
-        $user->mobileno= $request->mobileno;
+        $user->address = $request->address;
+        $user->mobileno = $request->mobileno;
         $user->roleid = $request->roleid;
         $user->rolename = $request->rolename;
-        $user->image=$imageName;
+        $user->image = $imageName;
         $user->password = Hash::make($request->password);
         $user->save();
         $tk =   $user->createToken('token')->plainTextToken;
@@ -108,65 +108,55 @@ file(
             ], 403);
         } else if (Auth::attempt(['cnic' => $request->cnic, 'password' => $request->password])) {
 
-            $user = Auth:: user();
+            $user = Auth::user();
 
 
             // dd($user->roleid);
-            if($user->roleid==3)
-            {
+            if ($user->roleid == 3) {
 
-             $users = User::where('cnic', $user->cnic)
-            ->join('residents', 'residents.residentid', '=' , 'users.id')->first();
+                $users = User::where('cnic', $user->cnic)->first();
 
-            $tk =   $request->user()->createToken('token')->plainTextToken;
+                $tk =   $request->user()->createToken('token')->plainTextToken;
 
 
-            return response()->json([
-                "success" => true,
-                "data" => $users,
-                "Bearer" => $tk
+                return response()->json([
+                    "success" => true,
+                    "data" => $users,
+                    "Bearer" => $tk
 
 
-            ]);
-        }
+                ]);
+            } else if ($user->roleid == 4) {
 
-           else if($user->roleid==4)
-            {
+                $user = User::where('cnic', $user->cnic)
+                    ->join('gatekeepers', 'gatekeepers.gatekeeperid', '=', 'users.id')->first();
 
-            $user = User::where('cnic', $user->cnic)
-            ->join('gatekeepers', 'gatekeepers.gatekeeperid', '=' , 'users.id')->first();
-
-            $tk =   $request->user()->createToken('token')->plainTextToken;
+                $tk =   $request->user()->createToken('token')->plainTextToken;
 
 
-            return response()->json([
-                "success" => true,
-                "data" => $user,
-                "Bearer" => $tk
+                return response()->json([
+                    "success" => true,
+                    "data" => $user,
+                    "Bearer" => $tk
 
 
-            ]);}
+                ]);
+            } else if ($user->roleid == 2) {
+
+                $user = User::where('cnic', $user->cnic)
+                    ->join('subadminsocieties', 'subadminsocieties.subadminid', '=', 'users.id')->first();
+
+                $tk =   $request->user()->createToken('token')->plainTextToken;
 
 
-            else if($user->roleid==2)
-            {
-
-            $user = User::where('cnic', $user->cnic)
-            ->join('subadminsocieties', 'subadminsocieties.subadminid', '=' , 'users.id')->first();
-
-            $tk =   $request->user()->createToken('token')->plainTextToken;
+                return response()->json([
+                    "success" => true,
+                    "data" => $user,
+                    "Bearer" => $tk
 
 
-            return response()->json([
-                "success" => true,
-                "data" => $user,
-                "Bearer" => $tk
-
-
-            ]);}
-
-            else
-            {
+                ]);
+            } else {
 
                 $tk =   $request->user()->createToken('token')->plainTextToken;
 
@@ -179,11 +169,7 @@ file(
 
                 ]);
             }
-
-
-
-        }
-        else if (!Auth::attempt(['cnic' => $request->cnic, 'password' => $request->password])) {
+        } else if (!Auth::attempt(['cnic' => $request->cnic, 'password' => $request->password])) {
 
             return response()->json([
                 "success" => false,
@@ -195,11 +181,12 @@ file(
 
 
 
-    public function logout (Request $request) {
+    public function logout(Request $request)
+    {
 
 
         $request->user()->currentAccessToken()->delete();
 
         return response(['message' => 'You have been successfully logged out.'], 200);
-        }
+    }
 }

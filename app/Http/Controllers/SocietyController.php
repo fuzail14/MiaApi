@@ -158,6 +158,16 @@ class SocietyController extends Controller
         return response()->json(["data" => $society]);
     }
 
+    
+    public function viewsocietiesforresidents()
+    {
+        $society = Society::all();
+
+        return response()->json(["data" => $society]);
+    }
+    
+    
+
     public function    searchsociety($q)
     {
 

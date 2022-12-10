@@ -15,18 +15,19 @@ class Resident extends Model
 
     protected $fillable = [
         "residentid",
-       "subadminid",
-       "vechileno",
-       "residenttype",
-       "propertytype",
-       "committeemember",
-
-
-
-
-
-
-
+        "subadminid",
+        "country",
+        "state",
+        "city",
+        "societyid",
+        "phaseid",
+        "blockid",
+        "streetid",
+        "houseid",
+        "houseaddress",
+        "vechileno",
+        "residenttype",
+        "propertytype",
+        "committeemember",
     ];
-
 }

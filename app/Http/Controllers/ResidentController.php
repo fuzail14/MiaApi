@@ -10,40 +10,40 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
+
 class ResidentController extends Controller
 {
 
 
 
-public function searchresident ($subadminid,$q)
-{
+    public function searchresident($subadminid, $q)
+    {
 
-    // ->join('users', 'users.id', '=', 'residents.residentid')
-    // ->join('owners', 'owners.residentid', "=", 'residents.residentid');
+        // ->join('users', 'users.id', '=', 'residents.residentid')
+        // ->join('owners', 'owners.residentid', "=", 'residents.residentid');
 
-    $data = User::join(
-        'residents', 'users.id',
-         '=', 'residents.residentid')
-      ->Where('residents.subadminid',$subadminid)
-     ->Where('users.firstname','LIKE','%'.$q.'%')
-     ->orWhere('users.lastname','LIKE','%'.$q.'%')
-     ->orWhere('users.mobileno','LIKE','%'.$q.'%')
-     ->orWhere('users.cnic','LIKE','%'.$q.'%')
-     ->orWhere('users.address','LIKE','%'.$q.'%')
-     ->orWhere('residents.vechileno','LIKE','%'.$q.'%')->get();
-
-
-return response()->json(
-    [
-        "success" => true,
-        "residentslist" => $data
-    ]
-);
+        $data = User::join(
+            'residents',
+            'users.id',
+            '=',
+            'residents.residentid'
+        )
+            ->Where('residents.subadminid', $subadminid)
+            ->Where('users.firstname', 'LIKE', '%' . $q . '%')
+            ->orWhere('users.lastname', 'LIKE', '%' . $q . '%')
+            ->orWhere('users.mobileno', 'LIKE', '%' . $q . '%')
+            ->orWhere('users.cnic', 'LIKE', '%' . $q . '%')
+            ->orWhere('users.address', 'LIKE', '%' . $q . '%')
+            ->orWhere('residents.vechileno', 'LIKE', '%' . $q . '%')->get();
 
 
-
-
-}
+        return response()->json(
+            [
+                "success" => true,
+                "residentslist" => $data
+            ]
+        );
+    }
 
     public function registerresident(Request $request)
 
@@ -51,19 +51,30 @@ return response()->json(
     {
 
         $isValidate = Validator::make($request->all(), [
-            'firstname' => 'required|string|max:191',
-            'lastname' => 'required|string|max:191',
-            'cnic' => 'required|unique:users|max:191',
-            'address' => 'required',
-            'mobileno' => 'required',
-            'roleid' => 'required',
-            'rolename' => 'required',
-            'password' => 'required',
-            'image' => 'required|image',
+            // 'firstname' => 'required|string|max:191',
+            // 'lastname' => 'required|string|max:191',
+            // 'cnic' => 'required|unique:users|max:191',
+            // 'address' => 'required',
+            // 'mobileno' => 'required',
+            // 'roleid' => 'required',
+            // 'rolename' => 'required',
+            // 'password' => 'required',
+            // 'image' => 'required|image',
+
+            "residentid" => 'required|exists:users,id',
+            
             "subadminid" => 'required|exists:users,id',
-            "vechileno" => "required",
+            
+            
+            "country" => "required",
+            "state" => "required",
+            "city" => "required",
+            "societyid" => "required",
+            "phaseid" => "required",
+            "blockid" => "required",
+            "streetid" => "required",
+            "houseid" => "required",
             "residenttype" => "required",
-            "propertytype" => "required",
             "committeemember" => "required",
             "ownername" => "nullable",
             "owneraddress" => "nullable",
@@ -81,29 +92,40 @@ return response()->json(
         }
 
 
-        $user = new User;
-        $user->firstname = $request->firstname;
-        $user->lastname = $request->lastname;
-        $user->cnic = $request->cnic;
-        $user->address = $request->address;
-        $user->mobileno = $request->mobileno;
-        $user->roleid = $request->roleid;
-        $user->rolename = $request->rolename;
-        $user->password = Hash::make($request->password);
+        // $user = new User;
+        // $user->firstname = $request->firstname;
+        // $user->lastname = $request->lastname;
+        // $user->cnic = $request->cnic;
+        // $user->address = $request->address;
+        // $user->mobileno = $request->mobileno;
+        // $user->roleid = $request->roleid;
+        // $user->rolename = $request->rolename;
+        // $user->password = Hash::make($request->password);
 
-        $image = $request->file('image');
-        $imageName = time() . "." . $image->extension();
-        $image->move(public_path('/storage/'), $imageName);
-        $user->image = $imageName;
-        $user->save();
-        $tk =   $user->createToken('token')->plainTextToken;
+        // $image = $request->file('image');
+        // $imageName = time() . "." . $image->extension();
+        // $image->move(public_path('/storage/'), $imageName);
+        // $user->image = $imageName;
+        // $user->save();
+        // $tk =   $user->createToken('token')->plainTextToken;
+
         $resident = new Resident;
-        $resident->residentid = $user->id;
+        $resident->residentid = $request->residentid;
         $resident->subadminid = $request->subadminid;
+        $resident->country = $request->country;
+        $resident->state = $request->state;
+        $resident->city = $request->city;
+        $resident->societyid = $request->societyid;
+        $resident->phaseid = $request->phaseid;
+        $resident->blockid = $request->blockid;
+        $resident->streetid = $request->streetid;
+        $resident->houseid = $request->houseid;
+        $resident->houseaddress = $request->houseaddress ?? 'NA';
+        
         $resident->vechileno = $request->vechileno;
         $resident->residenttype = $request->residenttype;
         $resident->propertytype = $request->propertytype;
-        $resident->committeemember = $request->committeemember??0;
+        $resident->committeemember = $request->committeemember ?? 0;
 
         $resident->save();
         $owner = new Owner;
@@ -118,10 +140,10 @@ return response()->json(
 
         return response()->json(
             [
-                "token" => $tk,
+                
                 "success" => true,
                 "message" => "Resident Register to our system Successfully",
-                "data" => $user,
+                "data" => $resident,
 
             ]
         );
@@ -236,7 +258,6 @@ return response()->json(
             $owner->owneraddress = $request->owneraddress;
             $owner->ownermobileno = $request->ownermobileno;
             $owner->update();
-
         }
 
 
@@ -264,43 +285,40 @@ return response()->json(
                 "success" => false
 
             ], 403);
-
         }
-            // $user = Auth:: user();
+        // $user = Auth:: user();
 
-            $user = User::where('cnic', $request->cnic)
-            ->join('residents', 'residents.residentid', '=' , 'users.id')->first();
+        $user = User::where('cnic', $request->cnic)
+            ->join('residents', 'residents.residentid', '=', 'users.id')->first();
 
-            // dd($user);
-            // if(Hash::check($request->password, $user->password)) {
-
-
-            //     return response()->json(['status'=>'true','message'=>'Email is correct']);
-            // } else {
-            //     return response()->json(['status'=>'false', 'message'=>'password is wrong']);
-            // }
+        // dd($user);
+        // if(Hash::check($request->password, $user->password)) {
 
 
-
-            $tk =   $request->user()->createToken('token')->plainTextToken;
-
-
-            return response()->json([
-                "success" => true,
-                "data" => $user,
-                "Bearer" => $tk
+        //     return response()->json(['status'=>'true','message'=>'Email is correct']);
+        // } else {
+        //     return response()->json(['status'=>'false', 'message'=>'password is wrong']);
+        // }
 
 
-            ]);
+
+        $tk =   $request->user()->createToken('token')->plainTextToken;
 
 
-            // return response()->json([
-            //     "success" => false,
-            //     "data" => "Unauthorized"
+        return response()->json([
+            "success" => true,
+            "data" => $user,
+            "Bearer" => $tk
 
-            // ], 401);
+
+        ]);
+
+
+        // return response()->json([
+        //     "success" => false,
+        //     "data" => "Unauthorized"
+
+        // ], 401);
 
     }
-
-
 }

@@ -11,7 +11,13 @@ use App\Http\Controllers\NoticeBoardController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PreApproveEntryController;
-use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\PhaseController;
+use App\Http\Controllers\BlockController;
+use App\Http\Controllers\StreetController;
+use App\Http\Controllers\HouseController;
+
+
+
 
 
 
@@ -25,11 +31,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::post('society/addsociety', [SocietyController::class, 'addsociety']);
   Route::put('society/updatesociety', [SocietyController::class, 'updatesociety']);
   Route::get('society/viewallsocieties/{userid}', [SocietyController::class, 'viewallsocieties']);
+
   Route::get('society/deletesociety/{id}', [SocietyController::class, 'deletesociety']);
 
   Route::get('society/viewsociety/{societyid}', [SocietyController::class, 'viewsociety']);
   Route::get('society/searchsociety/{q?}', [SocietyController::class, 'searchsociety']);
   Route::get('society/filtersocietybuilding/{id}/{q?}', [SocietyController::class, 'filtersocietybuilding']);
+  Route::get('society/viewsocietiesforresidents', [SocietyController::class, 'viewsocietiesforresidents']);
+
+
 
 
 
@@ -112,6 +122,39 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('preapproveentryresidents/{userid}', [PreApproveEntryController::class, 'preapproveentryresidents']);
   Route::get('preapproventrynotifications/{userid}', [PreApproveEntryController::class, 'preapproventrynotifications']);
   Route::get('preapproveentries/{userid}', [PreApproveEntryController::class, 'preapproveentries']);
+
+
+  // Phases
+  Route::post('addphases', [PhaseController::class, 'addphases']);
+  Route::get('phases/{subadminid}', [PhaseController::class, 'phases']);
+
+  Route::get('distinctphases/{subadminid}', [PhaseController::class, 'distinctphases']);
+  Route::get('viewphasesforresidents/{societyid}', [PhaseController::class, 'viewphasesforresidents']);
+
+
+  
+
+  // Blocks
+  Route::post('addblocks', [BlockController::class, 'addblocks']);
+  Route::get('blocks/{pid}', [BlockController::class, 'blocks']);
+  Route::get('distinctblocks/{bid}', [BlockController::class, 'distinctblocks']);
+  Route::get('viewblocksforresidents/{phaseid}', [BlockController::class, 'viewblocksforresidents']);
+  
+
+
+  // Streets
+  Route::post('addstreets', [StreetController::class, 'addstreets']);
+  Route::get('streets/{bid}', [StreetController::class, 'streets']);
+  Route::get('viewstreetsforresidents/{blockid}', [StreetController::class, 'viewstreetsforresidents']);
+  
+
+  
+
+  // Houses
+  Route::post('addhouses', [HouseController::class, 'addhouses']);
+  Route::get('viewhousesforresidents/{streetid}', [HouseController::class, 'viewhousesforresidents']);
+  
+  
 });
 
 
