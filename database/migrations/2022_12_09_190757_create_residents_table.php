@@ -39,6 +39,8 @@ return new class extends Migration
             $table->string('residenttype');
             $table->string('propertytype');
             $table->integer('committeemember');
+            $table->integer('status');
+            
             $table->timestamps();
 
         });

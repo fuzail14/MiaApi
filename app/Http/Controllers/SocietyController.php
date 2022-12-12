@@ -17,13 +17,13 @@ class SocietyController extends Controller
         $isValidate = Validator::make($request->all(), [
 
             'country' => 'required',
-            
+
             'state' => 'required',
 
 
             'city' => 'required',
             'type' => 'required',
-            
+
 
             'name' => 'required',
             'address' => 'required',
@@ -45,13 +45,13 @@ class SocietyController extends Controller
         $society = new Society();
 
         $society->country = $request->country;
-        
+
         $society->state = $request->state;
 
 
         $society->city = $request->city;
         $society->type = $request->type;
-        
+
 
 
         $society->name = $request->name;
@@ -73,13 +73,13 @@ class SocietyController extends Controller
         $isValidate = Validator::make($request->all(), [
 
             'country' => 'required',
-            
+
             'state' => 'required',
 
 
             'city' => 'required',
             'type' => 'required',
-            
+
 
             'name' => 'required',
 
@@ -102,14 +102,14 @@ class SocietyController extends Controller
         $society = Society::find($request->id);
 
         $society->country = $request->country;
-        
+
         $society->state = $request->state;
 
 
 
         $society->city = $request->city;
         $society->type = $request->type;
-        
+
 
 
         $society->name = $request->name;
@@ -158,15 +158,15 @@ class SocietyController extends Controller
         return response()->json(["data" => $society]);
     }
 
-    
+
     public function viewsocietiesforresidents()
     {
         $society = Society::all();
 
         return response()->json(["data" => $society]);
     }
-    
-    
+
+
 
     public function    searchsociety($q)
     {
@@ -177,13 +177,12 @@ class SocietyController extends Controller
         return response()->json(["data" => $society]);
     }
 
-    public function filtersocietybuilding($id,$q)
+    public function filtersocietybuilding($id, $q)
     {
 
 
-        $society = Society::where('superadminid',$id)->where('type', 'LIKE', '%' . $q . '%')->get();
+        $society = Society::where('superadminid', $id)->where('type', 'LIKE', '%' . $q . '%')->get();
 
         return response()->json(["data" => $society]);
     }
-    
 }

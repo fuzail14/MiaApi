@@ -79,6 +79,7 @@ class ResidentController extends Controller
             "ownername" => "nullable",
             "owneraddress" => "nullable",
             "ownermobileno" => "nullable",
+            "status" => "required",
 
 
 
@@ -126,6 +127,8 @@ class ResidentController extends Controller
         $resident->residenttype = $request->residenttype;
         $resident->propertytype = $request->propertytype;
         $resident->committeemember = $request->committeemember ?? 0;
+        $resident->status = $request->status ?? 0;
+        
 
         $resident->save();
         $owner = new Owner;

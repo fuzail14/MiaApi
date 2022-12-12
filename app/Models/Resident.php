@@ -29,5 +29,6 @@ class Resident extends Model
         "residenttype",
         "propertytype",
         "committeemember",
+        "status",
     ];
 }
