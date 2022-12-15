@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 
+
 class ResidentController extends Controller
 {
 
@@ -62,17 +63,17 @@ class ResidentController extends Controller
             // 'image' => 'required|image',
 
             "residentid" => 'required|exists:users,id',
-            
+
             "subadminid" => 'required|exists:users,id',
-            
-            
+
+
             "country" => "required",
             "state" => "required",
             "city" => "required",
-            "societyid" => "required",
-            "phaseid" => "required",
-            "blockid" => "required",
-            "streetid" => "required",
+            "societyname" => "required",
+            "phasename" => "required",
+            "blockname" => "required",
+            "streetname" => "required",
             "houseid" => "required",
             "residenttype" => "required",
             "committeemember" => "required",
@@ -116,34 +117,37 @@ class ResidentController extends Controller
         $resident->country = $request->country;
         $resident->state = $request->state;
         $resident->city = $request->city;
-        $resident->societyid = $request->societyid;
-        $resident->phaseid = $request->phaseid;
-        $resident->blockid = $request->blockid;
-        $resident->streetid = $request->streetid;
+        $resident->societyname = $request->societyname;
+        $resident->phasename = $request->phasename;
+        $resident->blockname = $request->blockname;
+        $resident->streetname = $request->streetname;
         $resident->houseid = $request->houseid;
         $resident->houseaddress = $request->houseaddress ?? 'NA';
-        
+
         $resident->vechileno = $request->vechileno;
         $resident->residenttype = $request->residenttype;
         $resident->propertytype = $request->propertytype;
         $resident->committeemember = $request->committeemember ?? 0;
         $resident->status = $request->status ?? 0;
-        
+
 
         $resident->save();
-        $owner = new Owner;
-        $owner->residentid = $resident->residentid;
-        $owner->ownername = $request->ownername ?? "NA";
-        $owner->owneraddress = $request->owneraddress ?? "NA";
-        $owner->ownermobileno = $request->ownermobileno ?? "NA";
-        $owner->save();
+        if ($resident->residenttype == 'Rental') {
+            $owner = new Owner;
+            $owner->residentid = $resident->residentid;
+            $owner->ownername = $request->ownername ?? "NA";
+            $owner->owneraddress = $request->owneraddress ?? "NA";
+            $owner->ownermobileno = $request->ownermobileno ?? "NA";
+            $owner->save();
+        }
+
 
 
 
 
         return response()->json(
             [
-                
+
                 "success" => true,
                 "message" => "Resident Register to our system Successfully",
                 "data" => $resident,

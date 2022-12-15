@@ -15,6 +15,11 @@ use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\StreetController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\FloorController;
+use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\BuildingResidentController;
+
+
 
 
 
@@ -37,8 +42,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('society/viewsociety/{societyid}', [SocietyController::class, 'viewsociety']);
   Route::get('society/searchsociety/{q?}', [SocietyController::class, 'searchsociety']);
   Route::get('society/filtersocietybuilding/{id}/{q?}', [SocietyController::class, 'filtersocietybuilding']);
-  Route::get('society/viewsocietiesforresidents', [SocietyController::class, 'viewsocietiesforresidents']);
-
+  Route::get('society/viewsocietiesforresidents/{type?}', [SocietyController::class, 'viewsocietiesforresidents']);
+ // Route::get('society/viewbuildingsforresidents', [SocietyController::class, 'viewbuildingsforresidents']);
+  
 
 
 
@@ -154,7 +160,28 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::post('addhouses', [HouseController::class, 'addhouses']);
   Route::get('viewhousesforresidents/{streetid}', [HouseController::class, 'viewhousesforresidents']);
   
+
+    //Bahir ki  Building ka Floors
+    Route::post('addfloors', [FloorController::class, 'addfloors']);
   
+
+    
+
+    // Route::get('phases/{subadminid}', [PhaseController::class, 'phases']);
+  
+    // Route::get('distinctphases/{subadminid}', [PhaseController::class, 'distinctphases']);
+     Route::get('viewfloorsforresidents/{buildingid}', [FloorController::class, 'viewfloorsforresidents']);
+  
+    //Bahir ki  Building ka Apartment
+    Route::post('addapartments', [ApartmentController::class, 'addapartments']);
+    Route::get('viewapartmentsforresidents/{floorid}', [ApartmentController::class, 'viewapartmentsforresidents']);
+  
+      // Building Residents
+
+  Route::post('registerbuildingresident', [BuildingResidentController::class, 'registerbuildingresident']);
+
+  
+
 });
 
 

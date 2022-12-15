@@ -22,6 +22,8 @@ class SocietyController extends Controller
 
 
             'city' => 'required',
+            'area' => 'required',
+
             'type' => 'required',
 
 
@@ -50,6 +52,8 @@ class SocietyController extends Controller
 
 
         $society->city = $request->city;
+        $society->area = $request->area;
+
         $society->type = $request->type;
 
 
@@ -78,6 +82,8 @@ class SocietyController extends Controller
 
 
             'city' => 'required',
+            'area' => 'required',
+
             'type' => 'required',
 
 
@@ -108,6 +114,8 @@ class SocietyController extends Controller
 
 
         $society->city = $request->city;
+        $society->area = $request->area;
+
         $society->type = $request->type;
 
 
@@ -159,12 +167,19 @@ class SocietyController extends Controller
     }
 
 
-    public function viewsocietiesforresidents()
+    public function viewsocietiesforresidents($type)
     {
-        $society = Society::all();
+        $society = Society::where('type','LIKE' , $type)->orWhere('type','LIKE' , $type)->get();
 
         return response()->json(["data" => $society]);
     }
+
+    // public function viewbuildingsforresidents()
+    // {
+    //     $society = Society::where('type','LIKE' , 'building')->get();
+
+    //     return response()->json(["data" => $society]);
+    // }
 
 
 

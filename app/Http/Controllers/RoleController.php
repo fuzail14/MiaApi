@@ -20,8 +20,8 @@ class RoleController extends Controller
         dd(file(public_path('/storage/1665565347.jpg')));
 
         return response()->file(
-                public_path('/storage/1665565347.jpg')
-            );
+            public_path('/storage/1665565347.jpg')
+        );
     }
 
 

@@ -16,15 +16,17 @@ return new class extends Migration
         Schema::create('societies', function (Blueprint $table) {
             $table->id();
             $table->string('country');
-            
+
             $table->string('state');
 
-            
-            $table->string('city');
-            $table->string('type');
-            
 
-            
+            $table->string('city');
+            $table->string('area');
+
+            $table->string('type');
+
+
+
             $table->string('name');
 
             $table->string('address');
@@ -33,10 +35,7 @@ return new class extends Migration
             // $table->unsignedBigInteger('roleid');
             // $table->foreign('roleid')->references('roleid')->on('users');
             $table->timestamps();
-
-            
         });
-
     }
 
     /**

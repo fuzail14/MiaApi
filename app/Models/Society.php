@@ -19,6 +19,7 @@ class Society extends Model
 
 
         'city',
+        'area',
         'type',
 
 
