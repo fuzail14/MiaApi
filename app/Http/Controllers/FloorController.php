@@ -65,31 +65,31 @@ class FloorController extends Controller
 
 
 
-    // public function floors($subadminid)
-    // {
+    public function floors($subadminid)
+    {
 
-    //     //  $isValidate = Validator::make($request->all(), [
+        //  $isValidate = Validator::make($request->all(), [
 
-    //     //         'subadminid' => 'required|exists:users,id',
+        //         'subadminid' => 'required|exists:users,id',
 
-    //     //     ]);
-    //     //     if ($isValidate->fails()) {
-    //     //         return response()->json([
-    //     //             "errors" => $isValidate->errors()->all(),
-    //     //             "success" => false
-    //     //         ], 403);
-    //     //     }
-    //     $phases =  Phase::where('subadminid', $subadminid)->get();
-
-
+        //     ]);
+        //     if ($isValidate->fails()) {
+        //         return response()->json([
+        //             "errors" => $isValidate->errors()->all(),
+        //             "success" => false
+        //         ], 403);
+        //     }
+        $floors =  Floor::where('subadminid', $subadminid)->get();
 
 
 
-    //     return response()->json([
-    //         "success" => true,
-    //         "data" => $phases,
-    //     ]);
-    // }
+
+
+        return response()->json([
+            "success" => true,
+            "data" => $floors,
+        ]);
+    }
 
 
 
@@ -113,5 +113,4 @@ class FloorController extends Controller
 
         return response()->json(["data" => $floors]);
     }
-
 }

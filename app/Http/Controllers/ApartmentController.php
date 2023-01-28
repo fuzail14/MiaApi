@@ -135,17 +135,18 @@ class ApartmentController extends Controller
 
 
 
-    // public function apartments($pid)
+    public function apartments($fid)
 
-    // {
+    {
 
-    //     $blocks =  Block::where('pid', $pid)->get();
+        $apartment =  Apartment::where('fid', $fid)->get();
 
-    //     return response()->json([
-    //         "success" => true,
-    //         "data" => $blocks,
-    //     ]);
-    // }
+        return response()->json([
+            "success" => true,
+            "data" => $apartment,
+        ]);
+    }
+
 
     public function viewapartmentsforresidents($floorid)
     {

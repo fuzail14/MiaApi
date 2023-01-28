@@ -53,14 +53,23 @@ class HouseController extends Controller
             "data" => $status,
         ]);
     }
-   
-    
+
+
     public function viewhousesforresidents($streetid)
     {
-        $house = House::where('sid',$streetid)->get();
+        $house = House::where('sid', $streetid)->get();
 
         return response()->json(["data" => $house]);
     }
-    
 
+    public function houses($sid)
+    {
+        $houses =  House::where('sid', $sid)->get();
+        $noofhouse =  $houses->count($sid);
+        return response()->json([
+            "success" => true,
+            "data" => $houses,
+            "noofhouses" => $noofhouse
+        ]);
+    }
 }

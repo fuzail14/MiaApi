@@ -159,11 +159,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
   // Houses
   Route::post('addhouses', [HouseController::class, 'addhouses']);
   Route::get('viewhousesforresidents/{streetid}', [HouseController::class, 'viewhousesforresidents']);
+  Route::get('houses/{sid}', [HouseController::class, 'houses']);
+
+  
   
 
     //Bahir ki  Building ka Floors
     Route::post('addfloors', [FloorController::class, 'addfloors']);
-  
+    Route::get('floors/{subadminid}', [FloorController::class, 'floors']);
+
+
 
     
 
@@ -175,12 +180,39 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Bahir ki  Building ka Apartment
     Route::post('addapartments', [ApartmentController::class, 'addapartments']);
     Route::get('viewapartmentsforresidents/{floorid}', [ApartmentController::class, 'viewapartmentsforresidents']);
-  
+    Route::get('apartments/{floorid}', [ApartmentController::class, 'apartments']);
+    
+
       // Building Residents
 
   Route::post('registerbuildingresident', [BuildingResidentController::class, 'registerbuildingresident']);
 
+
+
+    // Family Members
+
+    Route::post('addfamilymember',[FamilyMemberController::class,'addfamilymember']);
+    Route::get('viewfamilymember/{subadminid}/{residentid}',[FamilyMemberController::class,'viewfamilymember']);
   
+    Route::get('fire',[RoleController::class,'fire']);
+  
+  
+   //Chatroom
+   Route::post('createchatroom',[ChatRoomController::class,'createchatroom']);
+   
+   
+   //Chatroomuser
+//    fetchchatroomusers
+
+Route::get('fetchchatroomusers/{userid}/{chatuserid}',[ChatRoomUserController::class,'fetchchatroomusers']);
+
+  //Chats
+  Route::post('conversations',[ChatController::class,'conversations']);
+  Route::get('chatneighbours/{subadminid}',[ChatController::class,'chatneighbours']);
+  Route::get('chatgatekeepers/{subadminid}',[ChatController::class,'chatgatekeepers']);
+  Route::get('viewconversationsneighbours/{chatroomid}',[ChatController::class,'viewconversationsneighbours']);
+
+
 
 });
 
