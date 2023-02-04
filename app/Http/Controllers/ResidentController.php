@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Resident;
 use App\Models\Owner;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Auth;
 
 
 class ResidentController extends Controller
@@ -52,21 +50,10 @@ class ResidentController extends Controller
     {
 
         $isValidate = Validator::make($request->all(), [
-            // 'firstname' => 'required|string|max:191',
-            // 'lastname' => 'required|string|max:191',
-            // 'cnic' => 'required|unique:users|max:191',
-            // 'address' => 'required',
-            // 'mobileno' => 'required',
-            // 'roleid' => 'required',
-            // 'rolename' => 'required',
-            // 'password' => 'required',
-            // 'image' => 'required|image',
+
 
             "residentid" => 'required|exists:users,id',
-
             "subadminid" => 'required|exists:users,id',
-
-
             "country" => "required",
             "state" => "required",
             "city" => "required",
@@ -74,9 +61,11 @@ class ResidentController extends Controller
             "phasename" => "required",
             "blockname" => "required",
             "streetname" => "required",
+            "houseaddress" => "required",
             "houseid" => "required",
             "residenttype" => "required",
             "committeemember" => "required",
+            "vechileno" => "nullable",
             "ownername" => "nullable",
             "owneraddress" => "nullable",
             "ownermobileno" => "nullable",
@@ -123,15 +112,49 @@ class ResidentController extends Controller
         $resident->streetname = $request->streetname;
         $resident->houseid = $request->houseid;
         $resident->houseaddress = $request->houseaddress ?? 'NA';
-
-        $resident->vechileno = $request->vechileno;
+        $resident->vechileno = $request->vechileno??'';
         $resident->residenttype = $request->residenttype;
         $resident->propertytype = $request->propertytype;
         $resident->committeemember = $request->committeemember ?? 0;
         $resident->status = $request->status ?? 0;
-
-
         $resident->save();
+        $user = User::where('id',$request->subadminid)->get()->first();
+        $url = 'https://fcm.googleapis.com/fcm/send';
+        $serverkey='AAAAcuxXPmA:APA91bEz-6ptcGS8KzmgmSLjb-6K_bva-so3i6Eyji_ihfncqXttVXjdBQoU6V8sKilzLb9MvSHFId-KK7idDwbGo8aXHpa_zjGpZuDpM67ICKM7QMCGUO_JFULTuZ_ApIOxdF3TXeDR';
+        $headers = array (
+            'Authorization: key=' . $serverkey,
+            'Content-Type: application/json'
+        );
+        $mydata=['registration_ids'=>[$user->fcmtoken],
+
+        "data"=>["data"=>$resident],
+        "android"=> [
+            "priority"=> "high",
+            "ttl"=> 60 * 60 * 1,
+
+        ],
+        "notification"=>['title'=>'You have one verification request','body'=>'',
+        'description'=>"jani"]
+
+    ];
+    $finaldata=json_encode($mydata);
+        $headers = array (
+            'Authorization: key=' . $serverkey,
+            'Content-Type: application/json'
+        );
+        $ch = curl_init ();
+        curl_setopt ( $ch, CURLOPT_URL, $url );
+        curl_setopt ( $ch, CURLOPT_POST, true );
+        curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $finaldata );
+        $result = curl_exec ( $ch );
+        // var_dump($result);
+        curl_close ( $ch );
+
+
+
         if ($resident->residenttype == 'Rental') {
             $owner = new Owner;
             $owner->residentid = $resident->residentid;
@@ -166,10 +189,10 @@ class ResidentController extends Controller
         //     ->join('owners', 'owners.residentid', "=", 'residents.residentid')->paginate(5);
 
 
-        $data = Resident::where('subadminid', $id)
-            ->join('users', 'users.id', '=', 'residents.residentid')
+        $data = Resident::where('subadminid', $id)->where('status',1)
+            ->join('users', 'users.id', '=', 'residents.residentid')->get();
 
-            ->join('owners', 'owners.residentid', "=", 'residents.residentid')->get();
+            // ->join('owners', 'owners.residentid', "=", 'residents.residentid')->get();
 
 
 
@@ -275,6 +298,62 @@ class ResidentController extends Controller
         ]);
     }
 
+
+    public function loginresidentdetails ($residentid)
+
+    {
+        $data = Resident::where('residentid', $residentid)->get();
+
+
+
+    return response()->json(
+        [
+            "success" => true,
+            "data" => $data
+        ]
+    );
+
+
+
+    }
+    public function  loginresidentupdateaddress(Request $request)
+    {
+
+        $isValidate = Validator::make($request->all(), [
+
+            'residentid' => 'required',
+            'address' => 'required',
+        ]);
+
+
+
+
+        if ($isValidate->fails()) {
+            return response()->json([
+                "errors" => $isValidate->errors()->all(),
+                "success" => false
+
+            ], 403);
+        }
+        $user = User::Find($request->residentid);
+
+
+        $user->address=$request->address;
+        $user->update();
+
+
+        return response()->json([
+            "success" => true,
+
+
+
+        ]);
+
+
+    }
+
+
+
     public function residentlogin(Request $request)
     {
 
@@ -328,4 +407,73 @@ class ResidentController extends Controller
         // ], 401);
 
     }
+
+
+    public function unverifiedresident ($subadminid,$status)
+
+    {
+        $residents = Resident::where('subadminid',$subadminid)->where('status',$status) ->join('users', 'users.id', '=', 'residents.residentid')->get();
+
+
+
+
+
+        return response()->json([
+            "success" => true,
+            "data"=>$residents
+
+
+
+        ]);
+
+
+    }
+
+
+
+    public function verifyresident (Request $request)
+
+    {
+        $isValidate = Validator::make($request->all(), [
+
+
+            'residentid' => 'required|exists:residents,residentid',
+            'status'=>'required'
+
+        ]);
+
+
+        if ($isValidate->fails()) {
+            return response()->json([
+                "errors" => $isValidate->errors()->all(),
+                "success" => false
+
+            ], 403);
+        }
+
+
+
+
+
+        $residents = Resident::where('residentid',$request->residentid)->first();
+
+        // dd( $residents->status);
+        $residents->status=$request->status;
+        $residents->save();
+        $user =User::find($residents->residentid);
+        $user->address=  $residents->houseaddress;
+        $user->update();
+
+
+
+        return response()->json([
+            "success" => true,
+            "data"=>$residents
+
+        ]);
+
+
+    }
+
+
 }

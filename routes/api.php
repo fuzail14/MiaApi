@@ -18,6 +18,18 @@ use App\Http\Controllers\HouseController;
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\BuildingResidentController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChatRoomUserController;
+use App\Http\Controllers\ChatRoomController;
+use App\Http\Controllers\FamilyMemberController;
+
+
+
+
+
+
+
+
 
 
 
@@ -43,8 +55,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('society/searchsociety/{q?}', [SocietyController::class, 'searchsociety']);
   Route::get('society/filtersocietybuilding/{id}/{q?}', [SocietyController::class, 'filtersocietybuilding']);
   Route::get('society/viewsocietiesforresidents/{type?}', [SocietyController::class, 'viewsocietiesforresidents']);
- // Route::get('society/viewbuildingsforresidents', [SocietyController::class, 'viewbuildingsforresidents']);
-  
+  // Route::get('society/viewbuildingsforresidents', [SocietyController::class, 'viewbuildingsforresidents']);
+
 
 
 
@@ -62,14 +74,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::post('updatesubadmin', [SubAdminSocietyController::class, 'updatesubadmin']);
 
   // Residents
-
   Route::post('registerresident', [ResidentController::class, 'registerresident']);
-
   Route::get('viewresidents/{id}', [ResidentController::class, 'viewresidents']);
-
   Route::get('deleteresident/{id}', [ResidentController::class, 'deleteresident']);
-
+  Route::get('searchresident/{subadminid}/{q?}', [ResidentController::class, 'searchresident']);
   Route::post('updateresident', [ResidentController::class, 'updateresident']);
+  Route::get('loginresidentdetails/{residentid}', [ResidentController::class, 'loginresidentdetails']);
+  Route::get('unverifiedresident/{subadminid}/{status}', [ResidentController::class, 'unverifiedresident']);
+  Route::post('loginresidentupdateaddress', [ResidentController::class, 'loginresidentupdateaddress']);
+  Route::post('verifyresident', [ResidentController::class, 'verifyresident']);
+
 
 
 
@@ -138,82 +152,79 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('viewphasesforresidents/{societyid}', [PhaseController::class, 'viewphasesforresidents']);
 
 
-  
+
 
   // Blocks
   Route::post('addblocks', [BlockController::class, 'addblocks']);
   Route::get('blocks/{pid}', [BlockController::class, 'blocks']);
   Route::get('distinctblocks/{bid}', [BlockController::class, 'distinctblocks']);
   Route::get('viewblocksforresidents/{phaseid}', [BlockController::class, 'viewblocksforresidents']);
-  
+
 
 
   // Streets
   Route::post('addstreets', [StreetController::class, 'addstreets']);
   Route::get('streets/{bid}', [StreetController::class, 'streets']);
   Route::get('viewstreetsforresidents/{blockid}', [StreetController::class, 'viewstreetsforresidents']);
-  
 
-  
+
+
 
   // Houses
   Route::post('addhouses', [HouseController::class, 'addhouses']);
   Route::get('viewhousesforresidents/{streetid}', [HouseController::class, 'viewhousesforresidents']);
   Route::get('houses/{sid}', [HouseController::class, 'houses']);
 
-  
-  
-
-    //Bahir ki  Building ka Floors
-    Route::post('addfloors', [FloorController::class, 'addfloors']);
-    Route::get('floors/{subadminid}', [FloorController::class, 'floors']);
 
 
 
-    
+  //Bahir ki  Building ka Floors
+  Route::post('addfloors', [FloorController::class, 'addfloors']);
+  Route::get('floors/{subadminid}', [FloorController::class, 'floors']);
 
-    // Route::get('phases/{subadminid}', [PhaseController::class, 'phases']);
-  
-    // Route::get('distinctphases/{subadminid}', [PhaseController::class, 'distinctphases']);
-     Route::get('viewfloorsforresidents/{buildingid}', [FloorController::class, 'viewfloorsforresidents']);
-  
-    //Bahir ki  Building ka Apartment
-    Route::post('addapartments', [ApartmentController::class, 'addapartments']);
-    Route::get('viewapartmentsforresidents/{floorid}', [ApartmentController::class, 'viewapartmentsforresidents']);
-    Route::get('apartments/{floorid}', [ApartmentController::class, 'apartments']);
-    
 
-      // Building Residents
+
+
+
+  // Route::get('phases/{subadminid}', [PhaseController::class, 'phases']);
+
+  // Route::get('distinctphases/{subadminid}', [PhaseController::class, 'distinctphases']);
+  Route::get('viewfloorsforresidents/{buildingid}', [FloorController::class, 'viewfloorsforresidents']);
+
+  //Bahir ki  Building ka Apartment
+  Route::post('addapartments', [ApartmentController::class, 'addapartments']);
+  Route::get('viewapartmentsforresidents/{floorid}', [ApartmentController::class, 'viewapartmentsforresidents']);
+  Route::get('apartments/{floorid}', [ApartmentController::class, 'apartments']);
+
+
+  // Building Residents
 
   Route::post('registerbuildingresident', [BuildingResidentController::class, 'registerbuildingresident']);
 
 
 
-    // Family Members
+  // Family Members
 
-    Route::post('addfamilymember',[FamilyMemberController::class,'addfamilymember']);
-    Route::get('viewfamilymember/{subadminid}/{residentid}',[FamilyMemberController::class,'viewfamilymember']);
-  
-    Route::get('fire',[RoleController::class,'fire']);
-  
-  
-   //Chatroom
-   Route::post('createchatroom',[ChatRoomController::class,'createchatroom']);
-   
-   
-   //Chatroomuser
-//    fetchchatroomusers
+  Route::post('addfamilymember', [FamilyMemberController::class, 'addfamilymember']);
+  Route::get('viewfamilymember/{subadminid}/{residentid}', [FamilyMemberController::class, 'viewfamilymember']);
 
-Route::get('fetchchatroomusers/{userid}/{chatuserid}',[ChatRoomUserController::class,'fetchchatroomusers']);
+  Route::get('fire', [RoleController::class, 'fire']);
+
+
+  //Chatroom
+  Route::post('createchatroom', [ChatRoomController::class, 'createchatroom']);
+
+
+  //Chatroomuser
+  //    fetchchatroomusers
+
+  Route::get('fetchchatroomusers/{userid}/{chatuserid}', [ChatRoomUserController::class, 'fetchchatroomusers']);
 
   //Chats
-  Route::post('conversations',[ChatController::class,'conversations']);
-  Route::get('chatneighbours/{subadminid}',[ChatController::class,'chatneighbours']);
-  Route::get('chatgatekeepers/{subadminid}',[ChatController::class,'chatgatekeepers']);
-  Route::get('viewconversationsneighbours/{chatroomid}',[ChatController::class,'viewconversationsneighbours']);
-
-
-
+  Route::post('conversations', [ChatController::class, 'conversations']);
+  Route::get('chatneighbours/{subadminid}', [ChatController::class, 'chatneighbours']);
+  Route::get('chatgatekeepers/{subadminid}', [ChatController::class, 'chatgatekeepers']);
+  Route::get('viewconversationsneighbours/{chatroomid}', [ChatController::class, 'viewconversationsneighbours']);
 });
 
 
@@ -221,5 +232,12 @@ Route::get('fetchchatroomusers/{userid}/{chatuserid}',[ChatRoomUserController::c
 
 // Authentications
 
+
+
+
+
+
 Route::post('login', [RoleController::class, 'login']);
+Route::post('residentlogin', [ResidentController::class, 'residentlogin']);
+Route::post('registeruser', [RoleController::class, 'registeruser']);
 Route::post('register', [RoleController::class, 'register']);
