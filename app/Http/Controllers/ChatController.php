@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Chat;
 use App\Models\Gatekeeper;
 use App\Models\Resident;
@@ -33,11 +32,11 @@ class ChatController extends Controller
         }
 
         $chat = new Chat();
-        $chat->sender = $request->sender;
-        $chat->reciever = $request->reciever;
-        $chat->chatroomid = $request->chatroomid;
-        $chat->message = $request->message ?? '';
-        $chat->lastmessage = $request->lastmessage ?? '';
+        $chat->sender=$request->sender;
+        $chat->reciever=$request->reciever;
+        $chat->chatroomid=$request->chatroomid;
+        $chat->message=$request->message??'';
+        $chat->lastmessage=$request->lastmessage??'';
         $chat->save();
 
 
@@ -46,9 +45,12 @@ class ChatController extends Controller
 
 
         return response()->json([
-            "success" => true,
-            "data" => $chat
-        ]);
+            "success"=>true,
+            "data" => $chat]);
+
+
+
+
     }
 
     public function viewconversationsneighbours($chatroomid)
@@ -56,42 +58,46 @@ class ChatController extends Controller
 
 
 
-        $cov = Chat::where('chatroomid', $chatroomid)->get();
+        $cov=Chat::where('chatroomid',$chatroomid)->get();
 
         // event(new UserChat($cov));
 
 
 
         return response()->json([
-            "success" => true,
-            "data" => $cov
-        ]);
+            "success"=>true,
+            "data" => $cov]);
+
+
+
+
     }
 
 
     public function chatneighbours($subadminid)
     {
 
-        $chatneighbours =   Resident::where('subadminid', $subadminid)->where('status', 1)->join('users', 'residents.residentid', '=', 'users.id')->get();
+       $chatneighbours=   Resident::where('subadminid', $subadminid)->where('status',1)->join('users', 'residents.residentid', '=', 'users.id')->get();
 
         return
-            response()->json([
-                "success" => true,
-                "data" => $chatneighbours
-            ]);
+        response()->json(["success"=>true,
+        "data" => $chatneighbours]);
+
     }
 
 
     public function chatgatekeepers($subadminid)
     {
 
-        $chatgatekeepers = Gatekeeper::where('subadminid', $subadminid)->join('users', 'gatekeepers.gatekeeperid', '=', 'users.id')->get();
+        $chatgatekeepers= Gatekeeper::where('subadminid', $subadminid)->join('users', 'gatekeepers.gatekeeperid', '=', 'users.id')->get();
 
 
         return
-            response()->json([
-                "success" => true,
-                "data" => $chatgatekeepers
-            ]);
+        response()->json(["success"=>true,
+        "data" => $chatgatekeepers]);
     }
+
+
+
+
 }

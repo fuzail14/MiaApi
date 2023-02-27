@@ -11,7 +11,7 @@ class Floor extends Model
         'name',
         'subadminid',
         'buildingid',
-        
+
         'nooffloors'
     ];
     use HasFactory;

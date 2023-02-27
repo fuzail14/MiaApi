@@ -16,9 +16,8 @@ class PhaseController extends Controller
 
             'subadminid' => 'required|exists:users,id',
             'societyid' => 'required|exists:societies,id',
-
             'from' => 'required|integer',
-            'to' => 'required|integer',
+            'to' => 'required|integer|gt:from',
 
         ]);
         if ($isValidate->fails()) {
@@ -109,6 +108,6 @@ class PhaseController extends Controller
 
         return response()->json(["data" => $phase]);
     }
-    
-    
+
+
 }

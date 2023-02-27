@@ -65,7 +65,56 @@ class FloorController extends Controller
 
 
 
-    public function floors($subadminid)
+    // public function floors($subadminid)
+    // {
+
+    //     //  $isValidate = Validator::make($request->all(), [
+
+    //     //         'subadminid' => 'required|exists:users,id',
+
+    //     //     ]);
+    //     //     if ($isValidate->fails()) {
+    //     //         return response()->json([
+    //     //             "errors" => $isValidate->errors()->all(),
+    //     //             "success" => false
+    //     //         ], 403);
+    //     //     }
+    //     $phases =  Phase::where('subadminid', $subadminid)->get();
+
+
+
+
+
+    //     return response()->json([
+    //         "success" => true,
+    //         "data" => $phases,
+    //     ]);
+    // }
+
+
+
+    // public function distinctfloors($subadminid)
+
+    // {
+
+    //     $blocks =  Phase::where('subadminid', $subadminid)->join('blocks', 'blocks.pid', '=', 'phases.id')->distinct()->get();
+    //     $res = $blocks->unique('pid');
+
+    //     return response()->json([
+    //         "success" => true,
+    //         "data" => $res->values()->all(),
+    //     ]);
+    // }
+
+
+    public function viewfloorsforresidents($buildingid)
+    {
+        $floors = Floor::where('buildingid', $buildingid)->get();
+
+        return response()->json(["data" => $floors]);
+    }
+
+public function floors($subadminid)
     {
 
         //  $isValidate = Validator::make($request->all(), [
@@ -91,26 +140,4 @@ class FloorController extends Controller
         ]);
     }
 
-
-
-    // public function distinctfloors($subadminid)
-
-    // {
-
-    //     $blocks =  Phase::where('subadminid', $subadminid)->join('blocks', 'blocks.pid', '=', 'phases.id')->distinct()->get();
-    //     $res = $blocks->unique('pid');
-
-    //     return response()->json([
-    //         "success" => true,
-    //         "data" => $res->values()->all(),
-    //     ]);
-    // }
-
-
-    public function viewfloorsforresidents($buildingid)
-    {
-        $floors = Floor::where('buildingid', $buildingid)->get();
-
-        return response()->json(["data" => $floors]);
-    }
 }

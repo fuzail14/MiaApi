@@ -50,7 +50,9 @@ class AuthManager implements FactoryContract
     {
         $this->app = $app;
 
-        $this->userResolver = fn ($guard = null) => $this->guard($guard)->user();
+        $this->userResolver = function ($guard = null) {
+            return $this->guard($guard)->user();
+        };
     }
 
     /**
@@ -120,7 +122,11 @@ class AuthManager implements FactoryContract
     {
         $provider = $this->createUserProvider($config['provider'] ?? null);
 
-        $guard = new SessionGuard($name, $provider, $this->app['session.store']);
+        $guard = new SessionGuard(
+            $name,
+            $provider,
+            $this->app['session.store'],
+        );
 
         // When using the remember me functionality of the authentication services we
         // will need to be set the encryption instance of the guard, which allows
@@ -202,7 +208,9 @@ class AuthManager implements FactoryContract
 
         $this->setDefaultDriver($name);
 
-        $this->userResolver = fn ($name = null) => $this->guard($name)->user();
+        $this->userResolver = function ($name = null) {
+            return $this->guard($name)->user();
+        };
     }
 
     /**

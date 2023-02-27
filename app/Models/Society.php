@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Society extends Model
 {
 
+    protected $primeryKey='id';
 
     protected $fillable = [
 

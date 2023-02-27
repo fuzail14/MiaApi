@@ -8,15 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Owner extends Model
 {
 
-
+    protected $primarykey='residentid';
     // public $incrementing = false;
     use HasFactory;
+
 
     protected $fillable = [
         "residentid",
         "ownername",
          "owneraddress",
-           "ownermobileno",
+           "ownermobileno"
 
 
 

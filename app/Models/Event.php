@@ -8,12 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     use HasFactory;
+
+
+
     protected $fillable = [
-        "subadminid",
-        "title",
+        "userid"	,
+        "title"	,
         "description",
         "startdate",
-        "enddate",
+        "enddate"	,
         "active"
+
     ];
+
 }

@@ -11,7 +11,7 @@ class Resident extends Model
 
     use HasFactory;
 
-
+    protected $primarykey = 'residentid';
 
     protected $fillable = [
         "residentid",
@@ -24,11 +24,58 @@ class Resident extends Model
         "blockname",
         "streetname",
         "houseid",
+        // "buildingid",
+        // "floorid",
+        // "apartmentid",
+
+
         "houseaddress",
         "vechileno",
         "residenttype",
         "propertytype",
         "committeemember",
         "status",
+    ];
+
+
+    public function society()
+    {
+        return $this->hasMany('App\Models\Society', "id", 'societyid');
+    }
+
+    public function phase()
+    {
+        return $this->hasMany('App\Models\Phase', "id", 'pid');
+    }
+
+    public function block()
+    {
+        return $this->hasMany('App\Models\Block', "id", 'bid');
+    }
+
+    public function street()
+    {
+        return $this->hasMany('App\Models\Street', "id", 'sid');
+    }
+
+    public function property()
+    {
+        return $this->hasMany('App\Models\Property', "id", 'propertyid');
+    }
+
+    public function measurement()
+    {
+        return $this->hasMany('App\Models\Measurement', "id", 'measurementid');
+    }
+
+    public function owner()
+    {
+        return $this->hasMany('App\Models\Owner', "residentid", 'residentid');
+    }
+
+    protected $casts = [
+        "status" => 'integer',
+
+
     ];
 }

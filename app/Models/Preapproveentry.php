@@ -1,7 +1,10 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 class Preapproveentry extends Model
 {
     use HasFactory;
@@ -22,5 +25,6 @@ class Preapproveentry extends Model
     protected $casts = [ "gatekeeperid"=> 'integer',
      'userid' => 'integer',
      'status' => 'integer',
+
     ];
 }
