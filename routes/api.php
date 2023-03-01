@@ -138,7 +138,7 @@ Route::get('viewstreetsforresidents/{blockid}', [StreetController::class, 'views
 
 // Property
 Route::post('addproperties', [PropertyController::class, 'addproperties']);
-Route::get('properties/{sid}', [PropertyController::class, 'properties']);
+Route::get('properties/{dynamicid}/{type}', [PropertyController::class, 'properties']);
 Route::get('viewpropertiesforresidents/{streetid}', [PropertyController::class, 'viewpropertiesforresidents']);
 
 

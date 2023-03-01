@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Block;
 use App\Models\Street;
 use Illuminate\Http\Request;
@@ -67,9 +68,13 @@ class BlockController extends Controller
     {
 
         $isValidate = Validator::make($request->all(), [
-        'pid' => 'required|exists:phases,id',
-        'from'=>'required|integer',
-        'to'=>'required|integer|gt:from',
+            'subadminid' => 'required|exists:users,id',
+            'societyid' => 'required|exists:societies,id',
+            'superadminid' => 'required|exists:users,id',
+            'address' => 'required',
+            'from' => 'required|integer',
+            'to' => 'required|integer|gt:from',
+            'dynamicid' => 'required'
         ]);
 
         if ($isValidate->fails()) {
@@ -81,30 +86,36 @@ class BlockController extends Controller
 
         $blocks = new Block();
 
-        $from =(int) $request->from;
-        $to =(int) $request->to;
+        $from = (int) $request->from;
+        $to = (int) $request->to;
 
 
 
-        for($i=$from;$i<$to+1;$i++){
+        for ($i = $from; $i < $to + 1; $i++) {
 
 
-            $status= $blocks->insert(
-                  [
+            $status = $blocks->insert(
+                [
 
-                    ["name"=>'Block '.$i,
-                    'pid'=>$request->pid,
-                    'created_at'=>date('Y-m-d H:i:s.u'),
-                    'updated_at'=> date('Y-m-d H:i:s.u')],
+                    [
+                        "address" =>  $request->address,
+                        'subadminid' => $request->subadminid,
+                        'superadminid' => $request->superadminid,
+                        'societyid' => $request->societyid,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'iteration' => $i,
+                        'dynamicid' => $request->dynamicid
+                    ],
 
-            ]);
+                ]
+            );
+        }
 
-                }
-
-                return response()->json([
-                    "success" => true,
-                    "data" => $status,
-                ]);
+        return response()->json([
+            "success" => true,
+            "data" => $status,
+        ]);
     }
 
 
@@ -112,9 +123,8 @@ class BlockController extends Controller
 
     {
 
-        $blocks= Street::where('bid', $subadminid)->
-         join('blocks', 'blocks.id', '=', 'streets.id')
-         ->join('phases','phases.id','=','blocks.pid')->distinct()->get();
+        $blocks = Street::where('bid', $subadminid)->join('blocks', 'blocks.id', '=', 'streets.id')
+            ->join('phases', 'phases.id', '=', 'blocks.pid')->distinct()->get();
         $res = $blocks->unique('bid');
 
         return response()->json([
@@ -126,7 +136,7 @@ class BlockController extends Controller
 
 
 
-     public function blocks($pid)
+    public function blocks($pid)
 
     {
 
@@ -145,7 +155,4 @@ class BlockController extends Controller
         $phase = Block::where('pid', $phaseid)->get();
         return response()->json(["data" => $phase]);
     }
-
-
-
 }

@@ -15,11 +15,15 @@ class PropertyController extends Controller
 
         $isValidate = Validator::make($request->all(), [
 
-            'sid' => 'required|exists:streets,id',
-            'from' => 'required',
-            'to' => 'required|gt:from',
-            'type' => 'required',
-            'typeid' => 'required',
+            'subadminid' => 'required|exists:users,id',
+            'societyid' => 'required|exists:societies,id',
+            'superadminid' => 'required|exists:users,id',
+            'address' => 'required',
+            'from' => 'required|integer',
+            'to' => 'required|integer|gt:from',
+            'dynamicid' => 'required',
+            'type'=> 'required'
+
         ]);
         if ($isValidate->fails()) {
             return response()->json([
@@ -31,18 +35,22 @@ class PropertyController extends Controller
         $from = (int) $request->from;
         $to = (int) $request->to;
 
-        for ($i = $from; $i < $to; $i++) {
+        for ($i = $from; $i < $to + 1; $i++) {
 
 
             $status = $properties->insert([
 
                 [
-                    "address" => 'House no ' . $i,
-                    'sid' => $request->sid,
-                    'type' => $request->type,
-                    'typeid' => $request->typeid,
+                    "address" =>  $request->address,
+                    'subadminid' => $request->subadminid,
+                    'superadminid' => $request->superadminid,
+                    'societyid' => $request->societyid,
                     'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'iteration' => $i,
+                    'dynamicid' => $request->dynamicid,
+                    'type' => $request->type
+                    
                 ],
 
             ]);
@@ -58,9 +66,9 @@ class PropertyController extends Controller
 
 
 
-    public function properties($sid)
+    public function properties($dynamicid,$type)
     {
-        $properties =  Property::where('sid', $sid)->get();
+        $properties =  Property::where('dynamicid', $dynamicid)->where('type',$type)->get();
 
 
         return response()->json([

@@ -15,11 +15,26 @@ class CreatePropertiesTable extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sid');
-            $table->foreign('sid')->references('id')->on('streets')->onDelete('cascade');
             $table->string('address');
-            $table->unsignedBigInteger('typeid');
             $table->string('type');
+            
+            $table->string('iteration');
+
+            $table->unsignedBigInteger('dynamicid');
+
+            $table->unsignedBigInteger('subadminid');
+
+            $table->foreign('subadminid')->references('id')->on('users')->onDelete('cascade');
+
+            $table->unsignedBigInteger('societyid');
+            $table->foreign('societyid')->references('id')->on('societies')->onDelete('cascade');
+            $table->unsignedBigInteger('superadminid');
+
+            $table->foreign('superadminid')->references('id')->on('users')->onDelete('cascade');
+
+
+
+
             $table->timestamps();
         });
     }

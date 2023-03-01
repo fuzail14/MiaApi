@@ -117,9 +117,13 @@ class StreetController extends Controller
 
         $isValidate = Validator::make($request->all(), [
 
-        'bid' => 'required|exists:blocks,id',
-        'from'=>'required|integer',
-        'to'=>'required|integer|gt:from',
+            'subadminid' => 'required|exists:users,id',
+            'societyid' => 'required|exists:societies,id',
+            'superadminid' => 'required|exists:users,id',
+            'address' => 'required',
+            'from' => 'required|integer',
+            'to' => 'required|integer|gt:from',
+            'dynamicid' => 'required'
         ]);
 
         if ($isValidate->fails()) {
@@ -131,40 +135,44 @@ class StreetController extends Controller
 
 
         $streets = new Street();
-        $from =(int) $request->from;
-        $to =(int) $request->to;
+        $from = (int) $request->from;
+        $to = (int) $request->to;
 
 
-for($i=$from;$i<$to+1;$i++){
+        for ($i = $from; $i < $to + 1; $i++) {
 
 
-$status= $streets->insert(
-  [
+            $status = $streets->insert(
+                [
 
-    ["name"=>'Street '.$i,
-    'bid'=>$request->bid,
-    'created_at'=>date('Y-m-d H:i:s'),
-    'updated_at'=> date('Y-m-d H:i:s')],
+                    [
+                        "address" =>  $request->address,
+                        'subadminid' => $request->subadminid,
+                        'superadminid' => $request->superadminid,
+                        'societyid' => $request->societyid,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'iteration' => $i,
+                        'dynamicid' => $request->dynamicid
+                    ],
 
-]);
+                ]
+            );
+        }
 
-}
+        // $phases->subadminid = $request->subadminid;
 
-// $phases->subadminid = $request->subadminid;
-
-return response()->json([
-"success" => true,
-"data" => $status,
-]);
-
-
+        return response()->json([
+            "success" => true,
+            "data" => $status,
+        ]);
     }
 
-    public function streets($bid)
+    public function streets($dynamicid)
 
     {
 
-        $streets =  Street::where('bid', $bid)->get();
+        $streets =  Street::where('dynamicid', $dynamicid)->get();
 
         return response()->json([
             "success" => true,
@@ -176,8 +184,7 @@ return response()->json([
 
     public function viewstreetsforresidents($blockid)
     {
-        $streets = Street::where('bid',$blockid)->get();
+        $streets = Street::where('bid', $blockid)->get();
         return response()->json(["data" => $streets]);
     }
-
 }

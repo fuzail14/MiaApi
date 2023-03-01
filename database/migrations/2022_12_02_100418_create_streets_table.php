@@ -15,9 +15,22 @@ return new class extends Migration
     {
         Schema::create('streets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('bid');
-            $table->foreign('bid')->references('id')->on('blocks')->onDelete('cascade');
-            $table->string('name');
+            $table->string('address');
+            $table->string('iteration');
+
+            $table->unsignedBigInteger('dynamicid');
+
+            $table->unsignedBigInteger('subadminid');
+
+            $table->foreign('subadminid')->references('id')->on('users')->onDelete('cascade');
+
+            $table->unsignedBigInteger('societyid');
+            $table->foreign('societyid')->references('id')->on('societies')->onDelete('cascade');
+            $table->unsignedBigInteger('superadminid');
+
+            $table->foreign('superadminid')->references('id')->on('users')->onDelete('cascade');
+
+
             $table->timestamps();
         });
     }

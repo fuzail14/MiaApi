@@ -22,7 +22,7 @@ class CreateBillsTable extends Migration
             $table->double('balance');
             $table->unsignedBigInteger('subadminid');
             $table->foreign('subadminid')->references('id')->on('users')->onDelete('cascade');
-            // $table->unsignedBigInteger('residentid');
+            $table->unsignedBigInteger('residentid');
             // $table->foreign('residentid')->references('id')->on('residents')->onDelete('cascade');
             $table->unsignedBigInteger('propertyid');
             $table->foreign('propertyid')->references('id')->on('properties')->onDelete('cascade');

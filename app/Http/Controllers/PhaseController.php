@@ -16,8 +16,11 @@ class PhaseController extends Controller
 
             'subadminid' => 'required|exists:users,id',
             'societyid' => 'required|exists:societies,id',
+            'superadminid' => 'required|exists:users,id',
+            'address' => 'required',
             'from' => 'required|integer',
             'to' => 'required|integer|gt:from',
+            'dynamicid' => 'required'
 
         ]);
         if ($isValidate->fails()) {
@@ -38,12 +41,14 @@ class PhaseController extends Controller
                 [
 
                     [
-                        "name" => 'Phase ' . $i,
+                        "address" =>  $request->address,
                         'subadminid' => $request->subadminid,
+                        'superadminid' => $request->superadminid,
                         'societyid' => $request->societyid,
-
                         'created_at' => date('Y-m-d H:i:s'),
-                        'updated_at' => date('Y-m-d H:i:s')
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'iteration' => $i,
+                        'dynamicid' => $request->dynamicid
                     ],
 
                 ]
@@ -104,10 +109,8 @@ class PhaseController extends Controller
 
     public function viewphasesforresidents($societyid)
     {
-        $phase = Phase::where('societyid',$societyid)->get();
+        $phase = Phase::where('societyid', $societyid)->get();
 
         return response()->json(["data" => $phase]);
     }
-
-
 }

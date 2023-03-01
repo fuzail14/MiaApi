@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Resident;
 use App\Models\Owner;
 use App\Models\Houseresidentaddress;
+use App\Models\Apartmentresidentaddress;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 
@@ -121,8 +122,17 @@ class ResidentController extends Controller
             $address->propertyid = $request->propertyid;
             $address->measurementid = $request->measurementid;
             $address->save();
+        } else {
+            $address  = new Apartmentresidentaddress;
+            $address->residentid = $request->residentid;
+            $address->societyid = $request->societyid;
+            $address->pid = $request->pid;
+            $address->buildingid = $request->buildingid;
+            $address->societybuildingfloorid = $request->societybuildingfloorid;
+            $address->societybuildingapartmentid = $request->societybuildingapartmentid;
+            $address->measurementid = $request->measurementid;
+            $address->save();
         }
-
 
 
 
@@ -454,6 +464,39 @@ class ResidentController extends Controller
         ]);
     }
 
+    public function unverifiedapartmentresident($subadminid, $status)
+
+    {
+        // ->join('users', 'users.id', '=', 'residents.residentid')
+        // $residents = Resident::where('subadminid',$subadminid)->where('status',$status) 
+        // ->join('houseresidentaddresses', 'residents.residentid', '=', 'houseresidentaddresses.residentid')  ->join('users', 'users.id', '=', 'houseresidentaddresses.residentid')
+        // ->with('society')
+        // ->with('phase')
+        // ->with('block')
+        // ->with('street')
+        // ->with('property')
+        // ->with('measurement')->get();
+
+
+        $residents = Resident::where('subadminid', $subadminid)->where('status', $status)->where('propertytype', 'apartment')
+            ->join('apartmentresidentaddresses', 'residents.residentid', '=', 'apartmentresidentaddresses.residentid')->join('users', 'users.id', '=', 'apartmentresidentaddresses.residentid')
+            ->with('society')
+            ->with('phase')
+            ->with('building')
+            ->with('floor')
+            ->with('apartment')
+            ->with('measurement')->with('owner')->get();
+
+
+
+        return response()->json([
+            "success" => true,
+            "data" => $residents
+
+
+
+        ]);
+    }
 
 
     public function verifyhouseresident(Request $request)
@@ -494,6 +537,66 @@ class ResidentController extends Controller
         $residents->bid = $request->bid;
         $residents->sid = $request->sid;
         $residents->propertyid = $request->propertyid;
+        $residents->measurementid = $request->measurementid;
+        $residents->update();
+
+        $res = Resident::where('residentid', $residents->residentid)->first();
+        $res->status = $request->status;
+        $res->vechileno = $request->vechileno ?? '';
+        $res->update();
+
+
+        $user = User::where('id',  $residents->residentid)->first();
+        $user->address =  $res->houseaddress;
+        $user->update();
+
+
+
+        return response()->json([
+            "success" => true,
+            "data" => $residents
+
+        ]);
+    }
+
+
+    public function verifyapartmentresident(Request $request)
+
+    {
+        $isValidate = Validator::make($request->all(), [
+
+            'pid' => 'required',
+
+            'residentid' => 'required|exists:residents,residentid',
+            'status' => 'required',
+            'buildingid' => 'required',
+            'societybuildingfloorid' => 'required',
+            'societybuildingapartmentid' => 'required',
+            'vechileno' => 'nullable',
+            'measurementid' => 'required'
+        ]);
+
+
+        if ($isValidate->fails()) {
+            return response()->json([
+                "errors" => $isValidate->errors()->all(),
+                "success" => false
+
+            ], 403);
+        }
+
+
+
+
+
+        $residents = Apartmentresidentaddress::where('residentid', $request->residentid)->first();
+
+        // dd( $residents->status);
+
+        $residents->pid = $request->pid;
+        $residents->buildingid = $request->buildingid;
+        $residents->societybuildingfloorid = $request->societybuildingfloorid;
+        $residents->societybuildingapartmentid = $request->societybuildingapartmentid;
         $residents->measurementid = $request->measurementid;
         $residents->update();
 

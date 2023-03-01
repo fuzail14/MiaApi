@@ -24,11 +24,6 @@ class Resident extends Model
         "blockname",
         "streetname",
         "houseid",
-        // "buildingid",
-        // "floorid",
-        // "apartmentid",
-
-
         "houseaddress",
         "vechileno",
         "residenttype",
@@ -72,6 +67,31 @@ class Resident extends Model
     {
         return $this->hasMany('App\Models\Owner', "residentid", 'residentid');
     }
+
+
+    public function building()
+    {
+
+        return $this->hasMany('App\Models\Societybuilding', "id", 'buildingid');
+    }
+
+    public function floor()
+    {
+
+
+        return $this->hasMany('App\Models\Societybuildingfloor', "id", 'societybuildingfloorid');
+    }
+
+
+
+    public function apartment()
+    {
+
+        return $this->hasMany('App\Models\Societybuildingapartment', "id", 'societybuildingapartmentid');
+    }
+
+
+
 
     protected $casts = [
         "status" => 'integer',
